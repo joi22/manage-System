@@ -5,6 +5,8 @@ const usercontroller = require('../Controller/user_controller')
 const router= express.Router()
 
 router.get('/', usercontroller.getuser)
+router.post('/', usercontroller.register)
+router.post('/login', usercontroller.Login)
 
 
 
