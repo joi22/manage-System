@@ -2,12 +2,41 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
+import { useRef } from "react";
+import axios from 'axios'
 export function RegisterForm({ className, ...props } = {}) {
 
+  const usernameRef = useRef()
+  const emailRef = useRef()
+  const passwordRef = useRef()
+  const roleRef = useRef()
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const formdata = {
+      username: usernameRef.current?.value,
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+      role: roleRef.current.value,
+    };
+
+    console.log("Form Data:", formdata);
+
+    const rest = await fetch('http://localhost:3000/api/user/register', {
+      method:"POST",
+      body: formdata
+    })
+    const result = rest.json();
+    
+    // const response = await axios.get("http://localhost:3000/")
+    // const response = await axios.post("http://localhost:3000/api/user/register", formdata)
+    console.log(response)
+
+  };
 
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props}>
+    <form onSubmit={handleSubmit} className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Login to your account</h1>
         <p className="text-muted-foreground text-sm text-balance">
@@ -17,11 +46,18 @@ export function RegisterForm({ className, ...props } = {}) {
       <div className="grid gap-6">
         <div className="grid gap-3">
           <Label htmlFor="username">Username</Label>
-          <Input id="username" type="text" placeholder="Enter your username" required />
+          <Input ref={usernameRef} id="username" type="text" placeholder="Enter your username" required />
         </div>
         <div className="grid gap-3">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Input ref={emailRef} id="email" type="email" placeholder="m@example.com" required />
+        </div>
+        <div className="grid gap-3">
+          <select ref={roleRef}>
+            <option value={"admin"}>admin</option>
+            <option value={"manager"}>manager</option>
+            <option value={"user"}>user</option>
+          </select>
         </div>
         <div className="grid gap-3">
           <div className="flex items-center">
@@ -33,7 +69,7 @@ export function RegisterForm({ className, ...props } = {}) {
               Forgot your password?
             </a> */}
           </div>
-          <Input id="password" type="password" required />
+          <Input ref={passwordRef} id="password" type="password" required />
         </div>
         <Button type="submit" className="w-full red-button">
           Login
@@ -53,7 +89,7 @@ export function RegisterForm({ className, ...props } = {}) {
           Login with GitHub
         </Button> */}
       </div>
-     
+
     </form>
   );
 }
