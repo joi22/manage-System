@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRef } from "react";
+import { toast } from "sonner"; 
 import axios from 'axios'
 export function RegisterForm({ className, ...props } = {}) {
 
@@ -21,15 +22,24 @@ export function RegisterForm({ className, ...props } = {}) {
       role: roleRef.current.value,
     };
 
-    console.log("Form Data:", formdata);
+    // console.log("Form Data:", formdata);
 
-    const rest = await fetch('http://localhost:3000/api/user/register', {
-      method:"POST",
-      body: formdata
-    })
-    const result = rest.json();
+    const response = await fetch('http://localhost:3000/api/user/register', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formdata),
+    });
     
-    // const response = await axios.get("http://localhost:3000/")
+    const result = await response.json(); 
+    console.log(result, "check API is Working");
+  
+    if (result.status) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }    // const response = await axios.get("http://localhost:3000/")
     // const response = await axios.post("http://localhost:3000/api/user/register", formdata)
     console.log(response)
 
@@ -71,7 +81,7 @@ export function RegisterForm({ className, ...props } = {}) {
           </div>
           <Input ref={passwordRef} id="password" type="password" required />
         </div>
-        <Button type="submit" className="w-full red-button">
+        <Button type="submit"  className="w-full red-button">
           Login
         </Button>
         {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">

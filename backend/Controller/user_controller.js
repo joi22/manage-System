@@ -5,7 +5,7 @@ const User = require('../Model/user_schema')
 let usercontroller = {
     register: async (req, res) => {
 
-        const { username, email, password, role } = req.body
+        const { username, email, password, role } = req.body;
         const user = await User.findOne({ Email: email })
 
         if (!username || !email || !password || !role) {
@@ -77,6 +77,7 @@ let usercontroller = {
                     res.status(200).json({
                         message: "Login successful",
                         status: true,
+                        user,
                         token: token
                     })
                 }

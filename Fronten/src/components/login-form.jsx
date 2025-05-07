@@ -2,12 +2,53 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useContext, useRef } from "react";
+import { toast } from "sonner"; 
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../UserContext/UserContextProvider";
 
 export function LoginForm({ className, ...props }) {
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const navigate = useNavigate();
+  const {login}  = useContext(UserContext); // ⬅️ grab login function from context
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const formdata = {
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+    };
+
+    
+      const response = await fetch("http://localhost:3000/api/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formdata),
+      });
+
+      const result = await response.json();
+
+      if (result?.status) {
+        login(result.user); // ✅ save the actual user object returned from API
+        console.log(result.user)
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    // } catch (error) {
+    //   console.error("Login error:", error);
+    //   toast.error("Something went wrong. Please try again.");
+    // }
+  }
+  
+ 
 
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props}>
+    <form onSubmit={handleSubmit} className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Login to your account</h1>
         <p className="text-muted-foreground text-sm text-balance">
@@ -21,7 +62,7 @@ export function LoginForm({ className, ...props }) {
         </div> */}
         <div className="grid gap-3">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Input id="email" ref={emailRef } type="email" placeholder="m@example.com" required />
         </div>
         <div className="grid gap-3">
           <div className="flex items-center">
@@ -33,9 +74,9 @@ export function LoginForm({ className, ...props }) {
               Forgot your password?
             </a>
           </div>
-          <Input id="password" type="password" required />
+          <Input id="password" ref={passwordRef} type="password" required />
         </div>
-        <Button type="submit" className="w-full red-button">
+        <Button  type="submit" className="w-full red-button">
           Login
         </Button>
         {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -55,7 +96,7 @@ export function LoginForm({ className, ...props }) {
       </div>
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
-        <a href="#" className="underline underline-offset-4">
+        <a href="/register" className="underline underline-offset-4">
           Sign up
         </a>
       </div>
