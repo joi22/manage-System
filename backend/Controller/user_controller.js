@@ -74,10 +74,17 @@ let usercontroller = {
                     }
                     const token = jwt.sign({ id: user._id, role: user.Role }, process.env.JWT, { expiresIn: '1h' })
 
+                    const safeUser = {
+                        _id: user._id,
+                        Username: user.Username,
+                        Email: user.Email,
+                        Role: user.Role,
+                      };
+
                     res.status(200).json({
                         message: "Login successful",
                         status: true,
-                        user,
+                        user:safeUser,
                         token: token
                     })
                 }

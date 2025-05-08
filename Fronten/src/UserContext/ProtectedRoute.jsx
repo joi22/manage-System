@@ -1,18 +1,19 @@
-// components/ProtectedRoute.jsx
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext/UserContextProvider";
 
 function ProtectedRoute({ children, requiredRole }) {
-  const  user  = useContext(UserContext);
-console.log(user,",<<<<<<<<<<<<<<<<")
-  // Not logged in
-  if (!user) {
-    return <Navigate to="login" replace />;
+  const { user, loading } = useContext(UserContext);
+
+  if (loading) {
+    return <div>Loading...</div>; // ⬅️ you can make this a spinner later
   }
 
-  // Role-based access (optional)
-  if (requiredRole && user.role !== requiredRole) {
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (requiredRole && user.Role !== requiredRole) {
     return <Navigate to="/" replace />;
   }
 

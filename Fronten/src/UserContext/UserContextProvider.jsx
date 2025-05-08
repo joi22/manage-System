@@ -4,19 +4,18 @@ export const UserContext = createContext();
 
 function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // ⬅️ NEW
 
   useEffect(() => {
-    // Get user from localStorage on mount
     const storedUser = localStorage.getItem("user");
-    console.log(storedUser,"+++++++++=================")
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+    setLoading(false); // ⬅️ mark loading complete
   }, []);
 
   const login = (userData) => {
     localStorage.setItem("user", JSON.stringify(userData));
-    console.log(userData)
     setUser(userData);
   };
 
@@ -26,7 +25,7 @@ function UserContextProvider({ children }) {
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </UserContext.Provider>
   );

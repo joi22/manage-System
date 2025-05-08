@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useContext, useRef } from "react";
-import { toast } from "sonner"; 
+import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../UserContext/UserContextProvider";
 
@@ -11,7 +11,7 @@ export function LoginForm({ className, ...props }) {
   const emailRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
-  const {login}  = useContext(UserContext); // ⬅️ grab login function from context
+  const { login } = useContext(UserContext); // ⬅️ grab login function from context
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,31 +21,36 @@ export function LoginForm({ className, ...props }) {
       password: passwordRef.current.value,
     };
 
+
+    const response = await fetch("http://localhost:3000/api/user/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formdata),
+    });
+
+    const result = await response.json();
+
+    if (result?.status) {
+      login(result.user); 
+      toast.success(result.message);
     
-      const response = await fetch("http://localhost:3000/api/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formdata),
-      });
-
-      const result = await response.json();
-
-      if (result?.status) {
-        login(result.user); // ✅ save the actual user object returned from API
-        console.log(result.user)
-        toast.success(result.message);
+      if (result.user.Role === 'admin') {
+        navigate('/dashboard');
       } else {
-        toast.error(result.message);
+        navigate('/');
       }
+    } else {
+      toast.error(result.message);
+    }
     // } catch (error) {
     //   console.error("Login error:", error);
     //   toast.error("Something went wrong. Please try again.");
     // }
   }
-  
- 
+
+
 
   return (
     <form onSubmit={handleSubmit} className={cn("flex flex-col gap-6", className)} {...props}>
@@ -62,7 +67,7 @@ export function LoginForm({ className, ...props }) {
         </div> */}
         <div className="grid gap-3">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" ref={emailRef } type="email" placeholder="m@example.com" required />
+          <Input id="email" ref={emailRef} type="email" placeholder="m@example.com" required />
         </div>
         <div className="grid gap-3">
           <div className="flex items-center">
@@ -76,7 +81,7 @@ export function LoginForm({ className, ...props }) {
           </div>
           <Input id="password" ref={passwordRef} type="password" required />
         </div>
-        <Button  type="submit" className="w-full red-button">
+        <Button type="submit" className="w-full red-button">
           Login
         </Button>
         {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
