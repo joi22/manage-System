@@ -1,17 +1,18 @@
+// src/UserContext/UserContextProvider.jsx
 import React, { createContext, useState, useEffect } from "react";
 
 export const UserContext = createContext();
 
-function UserContextProvider({ children }) {
+export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // ⬅️ NEW
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
-    setLoading(false); // ⬅️ mark loading complete
+    setLoading(false);
   }, []);
 
   const login = (userData) => {
@@ -30,5 +31,3 @@ function UserContextProvider({ children }) {
     </UserContext.Provider>
   );
 }
-
-export default UserContextProvider;

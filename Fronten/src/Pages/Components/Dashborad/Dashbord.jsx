@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-
+import { Outlet } from 'react-router-dom';
+import Sidebar from './Sidebar';
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -10,12 +11,10 @@ const Dashboard = () => {
 
   return (
     <div className="flex">
-      
       <div className="flex-1 min-h-screen">
        
+       
         <main className="p-4 mt-4">
-          <h2 className="text-2xl font-semibold">Dashboard Content</h2>
-          {/* Your main dashboard content goes here */}
         </main>
       </div>
     </div>

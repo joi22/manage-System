@@ -11,44 +11,51 @@ export function LoginForm({ className, ...props }) {
   const emailRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
-  const { login } = useContext(UserContext); // ⬅️ grab login function from context
+  const { login } = useContext(UserContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const formdata = {
-      email: emailRef.current.value,
-      password: passwordRef.current.value,
-    };
-
-
-    const response = await fetch("http://localhost:3000/api/user/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formdata),
-    });
-
-    const result = await response.json();
-
-    if (result?.status) {
-      login(result.user); 
-      toast.success(result.message);
-    
-      if (result.user.Role === 'admin') {
-        navigate('/dashboard');
-      } else {
-        navigate('/');
-      }
-    } else {
-      toast.error(result.message);
+  
+    const email = emailRef.current?.value;
+    const password = passwordRef.current?.value;
+  
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
     }
-    // } catch (error) {
-    //   console.error("Login error:", error);
-    //   toast.error("Something went wrong. Please try again.");
-    // }
-  }
+  
+    const formdata = { email, password };
+  
+    try {
+      const response = await fetch("http://localhost:3000/api/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formdata),
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok && result?.status) {
+        login(result.user); 
+        toast.success(result.message);
+  
+        // ✅ Redirect based on role
+        if (result.user.Role === "admin") {
+          navigate("/dashboard");
+        } else {
+          navigate("/");
+        }
+      } else {
+        toast.error(result.message || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Something went wrong. Please try again.");
+    }
+  };
+  
 
 
 
