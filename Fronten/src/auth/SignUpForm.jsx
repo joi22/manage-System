@@ -1,34 +1,63 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router";
 // import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../icons";
 import Label from "../common/form/Label";
 import Input from "../common/form/InputField";
-import Checkbox from "../common/form/Checkbox";
+import { toast } from "sonner";
+import Button from "../common/form/Button";
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const ref = useRef()
+  const Frist_nameRef = useRef()
+  const Last_nameRef = useRef()
+  const emailRef = useRef()
+  const passwordRef = useRef()
+  const roleRef = useRef()
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const formdata = {
+      firstname: Frist_nameRef.current?.value,
+      lastname: Last_nameRef.current?.value,
+      email: emailRef.current?.value,
+      password: passwordRef.current?.value,
+      role: roleRef.current?.value,
+    };
+
+    console.log("Form Data:", formdata);
+
+    const response = await fetch('http://localhost:3000/api/user/register', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formdata),
+    });
+
+    const result = await response.json();
+    console.log(result, "check API is Working");
+
+    if (result.status) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }    // const response = await axios.get("http://localhost:3000/")
+    // const response = await axios.post("http://localhost:3000/api/user/register", formdata)
+    console.log(response)
+
+  };
+
+
   return (
     <div className="flex flex-col flex-1 w-full overflow-y-auto lg:w-1/2 no-scrollbar">
       <div className="w-full max-w-md mx-auto mb-5 sm:pt-10">
-        <Link
-          to="/"
-          className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-        >
-          {/* <ChevronLeftIcon className="size-5" /> */}
-          Back to dashboard
-        </Link>
+
       </div>
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
         <div>
-          <div className="mb-5 sm:mb-8">
-            <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
-              Sign Up
-            </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Enter your email and password to sign up!
-            </p>
-          </div>
+
           <div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
               <button className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
@@ -82,7 +111,7 @@ export default function SignUpForm() {
                 </span>
               </div>
             </div>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="space-y-5">
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   {/* <!-- First Name --> */}
@@ -95,6 +124,8 @@ export default function SignUpForm() {
                       id="fname"
                       name="fname"
                       placeholder="Enter your first name"
+                      ref={Frist_nameRef}
+
                     />
                   </div>
                   {/* <!-- Last Name --> */}
@@ -107,6 +138,7 @@ export default function SignUpForm() {
                       id="lname"
                       name="lname"
                       placeholder="Enter your last name"
+                      ref={Last_nameRef}
                     />
                   </div>
                 </div>
@@ -120,6 +152,7 @@ export default function SignUpForm() {
                     id="email"
                     name="email"
                     placeholder="Enter your email"
+                    ref={emailRef}
                   />
                 </div>
                 {/* <!-- Password --> */}
@@ -131,6 +164,7 @@ export default function SignUpForm() {
                     <Input
                       placeholder="Enter your password"
                       type={showPassword ? "text" : "password"}
+                      ref={passwordRef}
                     />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
@@ -145,28 +179,17 @@ export default function SignUpForm() {
                   </div>
                 </div>
                 {/* <!-- Checkbox --> */}
-                <div className="flex items-center gap-3">
-                  <Checkbox
-                    className="w-5 h-5"
-                    checked={isChecked}
-                    onChange={setIsChecked}
-                  />
-                  <p className="inline-block font-normal text-gray-500 dark:text-gray-400">
-                    By creating an account means you agree to the{" "}
-                    <span className="text-gray-800 dark:text-white/90">
-                      Terms and Conditions,
-                    </span>{" "}
-                    and our{" "}
-                    <span className="text-gray-800 dark:text-white">
-                      Privacy Policy
-                    </span>
-                  </p>
-                </div>
+
                 {/* <!-- Button --> */}
                 <div>
-                  <button className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
+                  <Button
+
+                    className={`w-full px-4 py-3 text-sm font-medium rounded-lg transition shadow-theme-xs border
+                        bg-brand-500 hover:bg-brand-600 text-white border-transparent"
+                        `}
+                  >
                     Sign Up
-                  </button>
+                  </Button>
                 </div>
               </div>
             </form>

@@ -4,10 +4,10 @@ const User = require("../Model/user_schema");
 
 let usercontroller = {
   register: async (req, res) => {
-    const { username, email, password, role } = req.body;
-    const user = await User.findOne({ Email: email });
-
-    if (!username || !email || !password || !role) {
+    const { firstname, lastname, email, password,} = req.body;
+    console.log(req.body)
+    const user = await User.findOne({ email });
+    if (!firstname || !lastname || !email || !password) {
       return res.status(400).json({
         message: "please fill all the fields",
         status: false,
@@ -19,35 +19,30 @@ let usercontroller = {
       });
     } else if (user) {
       return res.status(400).json({
-        message: `this email ${user.Email} is already registered`,
+        message: `this email ${user.email} is already registered`,
         status: false,
       });
     } else {
       const passwordHash = await bcrypt.hash(password, 10);
 
       const newUser = new User({
-        Username: username,
-        Email: email,
-        Password: passwordHash,
-        Role: role,
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        password: passwordHash,
       });
+      await newUser.save();
+      res.status(201).json({
+        message: "user registered successfully",
+        status: true,
+        user:newUser
+      })
 
-      try {
-        await newUser.save();
-        res.status(201).json({
-          message: "user registered successfully",
-          status: true,
-        });
-      } catch (error) {
-        res.status(500).json({
-          message: "error registering user",
-          status: false,
-        });
-      }
     }
   },
   Login: async (req, res) => {
     const { email, password } = req.body;
+    console.log(email, password)
     if (!email || !password) {
       return res.status(400).json({
         message: "please fill all the fields",
@@ -55,14 +50,14 @@ let usercontroller = {
       });
     } else {
       try {
-        const user = await User.findOne({ Email: email });
+        const user = await User.findOne({ email: email });
         if (!user) {
           return res.status(400).json({
             message: `this email ${email} is Not Found Please register`,
             status: false,
           });
         } else {
-          const isMatch = await bcrypt.compare(password, user.Password);
+          const isMatch = await bcrypt.compare(password, user.password);
           if (!isMatch) {
             return res.status(400).json({
               message: "Invalid credentials",
@@ -70,16 +65,17 @@ let usercontroller = {
             });
           }
           const token = jwt.sign(
-            { id: user._id, role: user.Role },
+            { id: user._id, role: user.role },
             process.env.JWT,
             { expiresIn: "1h" }
           );
 
           const safeUser = {
             _id: user._id,
-            Username: user.Username,
-            Email: user.Email,
-            Role: user.Role,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+            role: user.role,
           };
 
           res.status(200).json({
@@ -100,26 +96,26 @@ let usercontroller = {
   updateUsers: async (req, res) => {
 
     const { id } = req.params;
-    const { Username, profile_imag, Password } = req.body;
-console.log(Username,profile_imag,Password)
+    const { email, profile_imag, password } = req.body;
+    console.log(email, profile_imag, password)
     try {
       const updateData = {
-        Username,
+        email,
         profile_imag,
       };
 
-      if (Password && Password.length >= 6) {
-        updateData.Password = await bcrypt.hash(Password, 10);
-      } else if (Password && Password.length < 6) {
+      if (password && password.length >= 6) {
+        updateData.password = await bcrypt.hash(password, 10);
+      } else if (password && password.length < 6) {
         return res.status(400).json({
-          message: "Password must be at least 6 characters",
+          message: "password must be at least 6 characters",
           status: false,
         });
       }
 
       const updatedUser = await User.findByIdAndUpdate(id, updateData, {
         new: true,
-      }).select("-Password");
+      }).select("-password");
 
       res.status(200).json({
         message: "Profile updated successfully",

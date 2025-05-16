@@ -1,20 +1,70 @@
-import { useState } from "react";
-import { Link } from "react-router";
+import { useContext, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router";
 // import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../icons";
 import Label from "../common/form/Label";
 import Input from "../common/form/InputField";
 import Checkbox from "../common/form/Checkbox";
 import Button from "../common/form/Button";
+import { toast } from "sonner";
+import { UserContext } from "../context/UserContextProvider";
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const navigate = useNavigate();
+  const { login } = useContext(UserContext);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const email = emailRef.current?.value;
+    const password = passwordRef.current?.value;
+    console.log(email, password)
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    const formdata = { email, password };
+
+    try {
+      const response = await fetch("http://localhost:3000/api/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formdata),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result?.status) {
+        login(result.user);
+        toast.success(result.message);
+
+        // ✅ Redirect based on role
+        if (result.user.Role === "admin") {
+          navigate("/dashboard");
+        } else {
+          navigate("/");
+        }
+      } else {
+        toast.error(result.message || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Something went wrong. Please try again.");
+    }
+  };
+
   return (
     <div className="flex flex-col flex-1">
       <div className="w-full max-w-md pt-10 mx-auto">
         <Link
           to="/"
-          className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+          className="inline-flex items-center text-sm text-gray-500 transition-colors  dark:text-gray-400 dark:hover:text-gray-300"
         >
           {/* <ChevronLeftIcon className="size-5" /> */}
           Back to dashboard
@@ -32,7 +82,7 @@ export default function SignInForm() {
           </div>
           <div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
-              <button className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
+              <button className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal  transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200  dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
                 <svg
                   width="20"
                   height="20"
@@ -83,13 +133,13 @@ export default function SignInForm() {
                 </span>
               </div>
             </div>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="space-y-6">
                 <div>
                   <Label>
                     Email <span className="text-error-500">*</span>{" "}
                   </Label>
-                  <Input placeholder="info@gmail.com" />
+                  <Input type="Email" placeholder="info@gmail.com" ref={emailRef} />
                 </div>
                 <div>
                   <Label>
@@ -99,6 +149,7 @@ export default function SignInForm() {
                     <Input
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
+                      ref={passwordRef}
                     />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
@@ -127,7 +178,7 @@ export default function SignInForm() {
                   </Link>
                 </div>
                 <div>
-                  <Button className="w-full" size="sm">
+                  <Button type="submit" onClick={handleSubmit} className="border-amber-50 border-2 cursor-alias w-full" size="sm">
                     Sign in
                   </Button>
                 </div>
