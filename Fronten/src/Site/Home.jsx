@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../context/UserContextProvider";
+import Counter from "./comp/Counter";
 
 const categories = ["Strength", "Cardio", "Flexibility", "HIIT", "Other"];
 
@@ -47,7 +48,9 @@ const Home = () => {
   };
 
   return (
-    <form
+    <>
+    <Counter/>
+    {/* <form
       onSubmit={handleSubmit}
       className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6 space-y-6 mt-8"
     >
@@ -145,7 +148,9 @@ const Home = () => {
       >
         Save Workout
       </button>
-    </form>
+    </form> */}
+
+    </>
   );
 };
 

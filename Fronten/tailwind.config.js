@@ -3,7 +3,11 @@ module.exports = {
   darkMode: 'class', // ⬅️ THIS IS IMPORTANT!
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+       fontFamily: {
+        roobert: ['Manrope', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 };
