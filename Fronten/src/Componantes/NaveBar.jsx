@@ -17,11 +17,10 @@ const NaveBar = () => {
           <ChevronDown className="w-4 h-4" />
         </div>
         <a href="#" className="hover:text-pink-500">Workouts</a>
-        <a href="#" className="hover:text-pink-500">Exercises</a>
+        <a href="/blog" className="hover:text-pink-500">Exercises</a>
         
         <div className="border-l h-4 border-gray-600 mx-2" />
 
-        <a href="#" className="hover:text-pink-500">Help</a>
         <a href="#" className="hover:text-pink-500">Log In</a>
         
         <div className="flex items-center space-x-1 cursor-pointer hover:text-pink-500">

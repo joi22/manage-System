@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../context/UserContextProvider";
 import Counter from "./comp/Counter";
+import HeroSection from "./comp/HeroSection";
+import ExerciseList from "./comp/ExerciseList";
 
 const categories = ["Strength", "Cardio", "Flexibility", "HIIT", "Other"];
 
@@ -48,8 +50,44 @@ const Home = () => {
   };
 
   return (
-    <>
+    <><HeroSection/>
     <Counter/>
+   <section className="bg-[#14121F] text-white py-20">
+      <div className="container mx-auto px-6 flex flex-col-reverse lg:flex-row items-center">
+        {/* Text Content */}
+        <div className="lg:w-1/2 text-center lg:text-left space-y-6">
+          <p className="text-pink-500 font-semibold uppercase tracking-wide flex items-center justify-center lg:justify-start">
+            <svg
+              className="w-5 h-5 mr-2"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M12 0L9.19 7.62H.62l7.5 5.46-2.86 8.92L12 17.26l7.5 5.74-2.86-8.92 7.5-5.46h-8.57z" />
+            </svg>
+            How Fitbod Works
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold leading-tight">
+            Take the guesswork out of <span className="text-white">strength training.</span>
+          </h2>
+          <p className="text-gray-400 text-base max-w-xl mx-auto lg:mx-0">
+            Always know what to train, when. Fitbod removes the pain of planning to let you focus on making progress.
+          </p>
+        </div>
+
+        {/* Image Area */}
+        <div className="lg:w-1/2 mb-10 lg:mb-0 flex justify-center relative">
+      
+          <img
+            src="/media/sec-1.png"
+            alt="Back squat input"
+            className="sm:w-72  z-10 rounded-xl  ml-[-40px] relative"
+          />
+        </div>
+      </div>
+    </section>
+ 
+
+
     {/* <form
       onSubmit={handleSubmit}
       className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6 space-y-6 mt-8"

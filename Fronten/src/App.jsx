@@ -7,6 +7,8 @@ import ProtectedRoute from "./context/ProtectedRoute.jsx";
 import Home from "./Site/Home.jsx";
 import Profile from "./Site/Profile.jsx";
 import { useContext } from "react";
+import Blog from "./Site/Blog.jsx";
+import WorkoutForm from "./Site/WorkoutForm.jsx";
 // import Dashboard from "./Pages/Components/Dashborad/Dashbord.jsx";
 // import Dashboard_Layout from "./Pages/Components/Dashborad/Dashboard_Layout.jsx";
 // import Profile from "./Pages/Profile.jsx";
@@ -34,6 +36,19 @@ function App() {
           element: (
 
             <Profile />
+          ),
+        },
+        {
+          path: '/blog',
+          element: (
+
+            <Blog />
+          ),
+        },
+        {
+          path: '/workouts',
+          element: (
+            <WorkoutForm/>
           ),
         },
       ],
