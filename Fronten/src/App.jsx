@@ -9,9 +9,14 @@ import Profile from "./Site/Profile.jsx";
 import { useContext } from "react";
 import Blog from "./Site/Blog.jsx";
 import WorkoutForm from "./Site/WorkoutForm.jsx";
-// import Dashboard from "./Pages/Components/Dashborad/Dashbord.jsx";
-// import Dashboard_Layout from "./Pages/Components/Dashborad/Dashboard_Layout.jsx";
-// import Profile from "./Pages/Profile.jsx";
+import StepGoal from "./Site/pages/StepGoal.jsx";
+import StepExperience from "./Site/pages/StepExperience.jsx";
+import StepRoutine from "./Site/pages/StepRoutine.jsx";
+import OnboardingStepper from "./Site/OnboardingStepper.jsx";
+import Dashboard_Layout from "./Dashbord/Dashboard_Layout.jsx";
+import Dashboard from "./Dashbord/Dashboard_Layout.jsx";
+import Analytics from "./Dashbord/Analytics.jsx";
+
 
 function App() {
   const { user } = useContext(UserContext)
@@ -21,7 +26,7 @@ function App() {
 
     {
       path: "/",
-      element:user? <AppLayout />:<Navigate to="/login"/>,
+      element: user ? <AppLayout /> : <Navigate to="/login" />,
       children: [
         {
           index: true,
@@ -48,34 +53,64 @@ function App() {
         {
           path: '/workouts',
           element: (
-            <WorkoutForm/>
+            <WorkoutForm />
+          ),
+        },
+        {
+          path: '/onboarding/goal',
+          element: (
+            <StepGoal />
+          ),
+        },
+        {
+          path: '/onboarding/experience',
+          element: (
+            <StepExperience />
+          ),
+        },
+        {
+          path: '/onboarding/routine',
+          element: (
+            <StepRoutine />
+          ),
+        },
+        {
+          path: '/onboarding/main',
+          element: (
+            <OnboardingStepper />
           ),
         },
       ],
     },
 
-    // {
-    //   path: "/dashboard",
-    //   element: <Dashboard_Layout />,
-    //   children: [
-    //     {
-    //       index: true,
-    //       element: (
-    //         <ProtectedRoute requiredRole="admin">
-    //           <Dashboard />
-    //         </ProtectedRoute>
-    //       ),
-    //     },
-    //     {
-    //       path:'',
-    //       element: (
-    //         <ProtectedRoute requiredRole="admin">
+    {
+      path: "/dashboard",
+      element: (
+        <ProtectedRoute requiredRole="admin">
+          <Dashboard_Layout />
+        </ProtectedRoute>
+      ),
+      children: [
+        {
+          index: true,
+          element: (
+            <ProtectedRoute requiredRole="admin">
+              <Dashboard />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "analytics", // example of a nested dashboard route
+          element: (
+            <ProtectedRoute requiredRole="admin">
+              <Analytics />
+            </ProtectedRoute>
+          ),
+        },
+      ],
+    },
 
-    //         </ProtectedRoute>
-    //       ),
-    //     },
-    //   ],
-    // },
+
   ]);
 
   return (

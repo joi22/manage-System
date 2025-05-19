@@ -4,8 +4,8 @@ const User = require("../Model/user_schema");
 
 let usercontroller = {
   register: async (req, res) => {
-    const { firstname, lastname, email, password,} = req.body;
-    console.log(req.body)
+    const { firstname, lastname, email, password } = req.body;
+    console.log(req.body);
     const user = await User.findOne({ email });
     if (!firstname || !lastname || !email || !password) {
       return res.status(400).json({
@@ -35,14 +35,13 @@ let usercontroller = {
       res.status(201).json({
         message: "user registered successfully",
         status: true,
-        user:newUser
-      })
-
+        user: newUser,
+      });
     }
   },
   Login: async (req, res) => {
     const { email, password } = req.body;
-    console.log(email, password)
+    console.log(email, password);
     if (!email || !password) {
       return res.status(400).json({
         message: "please fill all the fields",
@@ -94,16 +93,15 @@ let usercontroller = {
     }
   },
   updateUsers: async (req, res) => {
-
     const { id } = req.params;
-    const { email, profile_imag, password } = req.body;
-    console.log(email, profile_imag, password)
-    try {
-      const updateData = {
-        email,
-        profile_imag,
-      };
+  
+    const { email, profile_img, password } = req.body;
 
+    const updateData = {
+      email,
+      profile_img,
+    };
+    try {
       if (password && password.length >= 6) {
         updateData.password = await bcrypt.hash(password, 10);
       } else if (password && password.length < 6) {
