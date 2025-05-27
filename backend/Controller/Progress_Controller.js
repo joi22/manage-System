@@ -1,41 +1,61 @@
-const Progress = require("../Model/Progress");
+const Progress = require("../Model/progress");
 
-const Progress_Controller = {
-  create_progress: async (req, res) => {
+const progressController = {
+  // Create a new progress log
+  addProgress: async (req, res) => {
     try {
-      const progress = await Progress.create(req.body);
-      res.status(201).json({ status: true, progress });
-    } catch (err) {
-      res.status(400).json({ status: false, message: err.message });
+      const log = new Progress({
+        ...req.body,
+        userId: req.user.id,
+      });
+      await log.save();
+      res.status(201).json({ message: "Progress log added", status: true, log });
+    } catch (error) {
+      res.status(500).json({ message: "Error adding progress", error });
     }
   },
 
-  get_progress: async (req, res) => {
+  // Get all progress logs for the current user
+  getProgress: async (req, res) => {
     try {
-      const progress = await Progress.find({ userId: req.params.userId });
-      res.json(progress);
-    } catch (err) {
-      res.status(500).json({ message: err.message });
+      const logs = await Progress.find({ userId: req.user.id }).sort({ date: -1 });
+      res.status(200).json({ status: true, logs });
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching progress logs", error });
     }
   },
 
-  update_progress: async (req, res) => {
+  // Update a progress log by ID
+  updateProgress: async (req, res) => {
     try {
-      const updated = await Progress.findByIdAndUpdate(req.params.id, req.body, { new: true });
-      res.json(updated);
-    } catch (err) {
-      res.status(400).json({ message: err.message });
+      const updated = await Progress.findOneAndUpdate(
+        { _id: req.params.id, userId: req.user.id },
+        req.body,
+        { new: true }
+      );
+      res.status(200).json({ message: "Progress updated", status: true, log: updated });
+    } catch (error) {
+      res.status(500).json({ message: "Error updating progress", error });
     }
   },
 
-  delete_progress: async (req, res) => {
+  // Delete a progress log by ID
+  deleteProgress: async (req, res) => {
     try {
-      await Progress.findByIdAndDelete(req.params.id);
-      res.json({ success: true });
-    } catch (err) {
-      res.status(500).json({ message: err.message });
+      await Progress.findOneAndDelete({ _id: req.params.id, userId: req.user.id });
+      res.status(200).json({ message: "Progress log deleted", status: true });
+    } catch (error) {
+      res.status(500).json({ message: "Error deleting progress", error });
     }
+  },
+  getLatestProgress: async (req, res) => {
+  try {
+    const log = await Progress.findOne({ userId: req.user.id }).sort({ date: -1 });
+    res.status(200).json({ status: true, log });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching latest progress", error });
   }
+},
 };
 
-module.exports = Progress_Controller;
+module.exports = progressController;

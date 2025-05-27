@@ -1,41 +1,61 @@
 const Nutrition = require("../Model/Nutrition");
 
-const Nutrition_Controller = {
-  create_entry: async (req, res) => {
+const nutritionController = {
+  // Add a new nutrition log
+  addLog: async (req, res) => {
     try {
-      const entry = await Nutrition.create(req.body);
-      res.status(201).json({ status: true, entry });
-    } catch (err) {
-      res.status(400).json({ status: false, message: err.message });
+      const log = new Nutrition({
+        ...req.body,
+        userId: req.user.id,
+      });
+      await log.save();
+      res.status(201).json({ message: "Nutrition log created", status: true, log });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create log", error });
     }
   },
 
-  get_entries: async (req, res) => {
+  // Get all logs for the current user
+  getLogs: async (req, res) => {
     try {
-      const entries = await Nutrition.find({ userId: req.params.userId });
-      res.json(entries);
-    } catch (err) {
-      res.status(500).json({ message: err.message });
+      const logs = await Nutrition.find({ userId: req.user.id }).sort({ date: -1 });
+      res.status(200).json({ status: true, logs });
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching logs", error });
     }
   },
 
-  update_entry: async (req, res) => {
+  // Update a specific log
+  updateLog: async (req, res) => {
     try {
-      const updated = await Nutrition.findByIdAndUpdate(req.params.id, req.body, { new: true });
-      res.json(updated);
-    } catch (err) {
-      res.status(400).json({ message: err.message });
+      const updated = await Nutrition.findOneAndUpdate(
+        { _id: req.params.id, userId: req.user.id },
+        req.body,
+        { new: true }
+      );
+      res.status(200).json({ message: "Log updated", status: true, log: updated });
+    } catch (error) {
+      res.status(500).json({ message: "Error updating log", error });
     }
   },
 
-  delete_entry: async (req, res) => {
+  // Delete a log
+  deleteLog: async (req, res) => {
     try {
-      await Nutrition.findByIdAndDelete(req.params.id);
-      res.json({ success: true });
-    } catch (err) {
-      res.status(500).json({ message: err.message });
+      await Nutrition.findOneAndDelete({ _id: req.params.id, userId: req.user.id });
+      res.status(200).json({ message: "Log deleted", status: true });
+    } catch (error) {
+      res.status(500).json({ message: "Error deleting log", error });
     }
+  },
+  getLatestLog: async (req, res) => {
+  try {
+    const log = await Nutrition.findOne({ userId: req.user.id }).sort({ date: -1 });
+    res.status(200).json({ status: true, log });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching latest nutrition log", error });
   }
+},
 };
 
-module.exports = Nutrition_Controller;
+module.exports = nutritionController;

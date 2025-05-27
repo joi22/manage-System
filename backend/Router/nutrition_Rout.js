@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const Nutrition_Controller = require("../Controller/Nutrition_Controller.js");
+const auth = require("../auth/auth");
+const nutritionController = require("../Controller/Nutrition_Controller");
 
-router.post("/", Nutrition_Controller.create_entry);
-router.get("/:userId", Nutrition_Controller.get_entries);
-router.put("/:id", Nutrition_Controller.update_entry);
-router.delete("/:id", Nutrition_Controller.delete_entry);
+router.post("/", auth, nutritionController.addLog);
+router.get("/", auth, nutritionController.getLogs);
+router.put("/:id", auth, nutritionController.updateLog);
+router.delete("/:id", auth, nutritionController.deleteLog);
+router.get("/latest", auth, nutritionController.getLatestLog);
 
 module.exports = router;

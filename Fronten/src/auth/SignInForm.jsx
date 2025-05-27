@@ -41,7 +41,10 @@ export default function SignInForm() {
       const result = await response.json();
 
       if (response.ok && result?.status) {
-        login(result.user);
+        login({
+        user: data.user,
+        token: data.token
+      });
         toast.success(result.message);
 
         // ✅ Redirect based on role

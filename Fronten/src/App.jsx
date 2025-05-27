@@ -8,8 +8,8 @@ import Home from "./Site/Home.jsx";
 import Profile from "./Site/Profile.jsx";
 import { useContext } from "react";
 import Blog from "./Site/Blog.jsx";
-import WorkoutForm from "./Site/WorkoutForm.jsx";
-// import Dashboard from "./Pages/Components/Dashborad/Dashbord.jsx";
+import WorkoutPage from "./Site/WorkoutPage.jsx";
+import Dashboard from "./Dashbord/Dashboard.jsx";
 // import Dashboard_Layout from "./Pages/Components/Dashborad/Dashboard_Layout.jsx";
 // import Profile from "./Pages/Profile.jsx";
 
@@ -48,7 +48,13 @@ function App() {
         {
           path: '/workouts',
           element: (
-            <WorkoutForm/>
+            <WorkoutPage/>
+          ),
+        },
+        {
+          path: '/dashboard',
+          element: (
+            <Dashboard/>
           ),
         },
       ],

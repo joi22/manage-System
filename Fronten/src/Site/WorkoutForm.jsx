@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "../api/axios";
+import { UserContext } from "../context/UserContextProvider";
+import { toast } from "sonner";
 
 const WorkoutForm = ({ onWorkoutAdded }) => {
+  const { user } = useContext(UserContext);
+
   const [form, setForm] = useState({
-    userId: "", // Should come from auth/user context
     title: "",
     category: "strength",
-    tags: [],
-    exercises: [{ name: "", sets: 0, reps: 0, weight: 0, notes: "" }]
+    exercises: [{ name: "", sets: 0, reps: 0, weight: 0, notes: "" }],
   });
 
   const handleChange = (e, i, field) => {
@@ -23,34 +25,74 @@ const WorkoutForm = ({ onWorkoutAdded }) => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("/workouts", form);
-      onWorkoutAdded();
-      setForm({ ...form, title: "", exercises: [] });
-    } catch (err) {
-      console.error(err);
-    }
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const workoutData = { ...form, userId: user._id };
+    const token = localStorage.getItem("token"); // get token
+console.log(token,"wewewe")
+    const response = await fetch("http://localhost:3000/api/workout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // ✅ add the token here
+      },
+      body: JSON.stringify(workoutData),
+    });
+
+    toast
+
+    onWorkoutAdded();
+    setForm({
+      title: "",
+      category: "strength",
+      exercises: [{ name: "", sets: 0, reps: 0, weight: 0, notes: "" }]
+    });
+  } catch (err) {
+    console.error("Error submitting workout:", err);
+  }
+};
+
+
+  const EXERCISE_OPTIONS = [
+    "Bench Press",
+    "Squat",
+    "Deadlift",
+    "Push-ups",
+    "Pull-ups",
+    "Running",
+    "Cycling",
+    "Plank",
+    "Shoulder Press",
+    "Bicep Curls",
+  ];
+
 
   return (
     <form onSubmit={handleSubmit} className=" p-6 rounded shadow space-y-4">
       <input
         type="text"
-        placeholder="Title"
+        placeholder="Workout Title"
         className="input"
         value={form.title}
         onChange={(e) => setForm({ ...form, title: e.target.value })}
+        required
       />
       {form.exercises.map((ex, i) => (
         <div key={i} className="grid grid-cols-2 md:grid-cols-5 gap-2">
-          <input
-            placeholder="Exercise"
+          <select
             className="input"
             value={ex.name}
             onChange={(e) => handleChange(e, i, "name")}
-          />
+            required
+          >
+            <option value="">Select Exercise</option>
+            {EXERCISE_OPTIONS.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
           <input
             type="number"
             placeholder="Sets"
@@ -80,12 +122,14 @@ const WorkoutForm = ({ onWorkoutAdded }) => {
           />
         </div>
       ))}
-      <button type="button" onClick={addExercise} className="bg-blue-500 text-white px-3 py-1 rounded">
-        + Add Exercise
-      </button>
-      <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
-        Save Workout
-      </button>
+      <div className="flex gap-2">
+        <button type="button" onClick={addExercise} className="bg-blue-500 text-white px-3 py-1 rounded">
+          + Add Exercise
+        </button>
+        <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
+          Save Workout
+        </button>
+      </div>
     </form>
   );
 };
