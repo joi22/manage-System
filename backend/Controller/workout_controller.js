@@ -8,6 +8,8 @@ const workoutController = {
         ...req.body,
         userId: req.user.id,
       });
+      console.log("Creating workout for user:", req.user.id);
+      console.log("Workout data:", workout);
       await workout.save();
       res.status(201).json({
         message: "Workout created successfully",

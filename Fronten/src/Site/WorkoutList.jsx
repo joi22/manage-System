@@ -1,40 +1,55 @@
-import { useEffect, useState } from "react";
-import axios from "../api/axios";
-import { useContext } from "react";
-import { UserContext } from "../context/UserContextProvider";
+// src/pages/WorkoutList.jsx
+import React, { useEffect, useState, useContext } from 'react';
+import { UserContext } from '../context/UserContextProvider';
 
-const WorkoutList = ({ refresh }) => {
+const WorkoutList = () => {
   const [workouts, setWorkouts] = useState([]);
   const { user } = useContext(UserContext);
 
-  const fetchWorkouts = async () => {
-    try {
-      const res = await axios.get(`http://localhost:5173/workouts/${user._id}`);
-      setWorkouts(res.data.data || []);
-    } catch (err) {
-      console.error("Error fetching workouts:", err.message);
-    }
-  };
-
   useEffect(() => {
-    if (user?._id) fetchWorkouts();
-  }, [refresh, user]);
+    const fetchWorkouts = async () => {
+      try {
+        const response = await fetch('/api/workout', {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        });
+        const data = await response.json();
+        setWorkouts(data);
+      } catch (error) {
+        console.error('Failed to fetch workouts:', error);
+      }
+    };
+
+    if (user) {
+      fetchWorkouts();
+    }
+  }, [user]);
 
   return (
-    <div className="mt-8 space-y-4">
-      {workouts.map((w) => (
-        <div key={w._id} className=" p-4 rounded shadow">
-          <h3 className="font-bold text-lg">{w.title}</h3>
-          <p className="text-sm text-gray-500">Category: {w.category}</p>
-          <ul className="mt-2 space-y-1">
-            {w.exercises.map((ex, i) => (
-              <li key={i} className="text-sm">
-                {ex.name} - {ex.sets}x{ex.reps} @ {ex.weight}kg
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+    <div className="p-4">
+      <h2 className="text-xl font-bold mb-4">Your Workouts</h2>
+      {workouts.length === 0 ? (
+        <p>No workouts found.</p>
+      ) : (
+        <ul className="space-y-4">
+          {workouts.map((workout) => (
+            <li
+              key={workout._id}
+              className="p-4 border rounded-md shadow-md bg-white"
+            >
+              <h3 className="text-lg font-semibold">{workout.title}</h3>
+              <p>Category: {workout.category}</p>
+              <p>Sets: {workout.sets}</p>
+              <p>Reps: {workout.reps}</p>
+              <p className="text-sm text-gray-500">
+                Date: {new Date(workout.date).toLocaleDateString()}
+              </p>
+              {/* 🗑️ Delete/Edit buttons can go here */}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

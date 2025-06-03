@@ -10,6 +10,7 @@ import { useContext } from "react";
 import Blog from "./Site/Blog.jsx";
 import WorkoutPage from "./Site/WorkoutPage.jsx";
 import Dashboard from "./Dashbord/Dashboard.jsx";
+import WorkoutList from "./Site/WorkoutList.jsx";
 // import Dashboard_Layout from "./Pages/Components/Dashborad/Dashboard_Layout.jsx";
 // import Profile from "./Pages/Profile.jsx";
 
@@ -35,7 +36,7 @@ function App() {
           path: '/profile',
           element: (
 
-            <Profile />
+            <WorkoutList />
           ),
         },
         {

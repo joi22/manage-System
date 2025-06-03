@@ -8,7 +8,7 @@ const WorkoutForm = ({ onWorkoutAdded }) => {
 
   const [form, setForm] = useState({
     title: "",
-    category: "strength",
+    category: "Strength",
     exercises: [{ name: "", sets: 0, reps: 0, weight: 0, notes: "" }],
   });
 
@@ -25,33 +25,34 @@ const WorkoutForm = ({ onWorkoutAdded }) => {
     });
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const workoutData = { ...form, userId: user._id };
-    const token = localStorage.getItem("token"); // get token
-console.log(token,"wewewe")
-    const response = await fetch("http://localhost:3000/api/workout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // ✅ add the token here
-      },
-      body: JSON.stringify(workoutData),
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const workoutData = { ...form };
+      const token = localStorage.getItem("resultToken"); // ✅
 
-    toast
-
-    onWorkoutAdded();
-    setForm({
-      title: "",
-      category: "strength",
-      exercises: [{ name: "", sets: 0, reps: 0, weight: 0, notes: "" }]
-    });
-  } catch (err) {
-    console.error("Error submitting workout:", err);
-  }
-};
+      const response = await fetch("http://localhost:3000/api/workout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // ✅ include token
+        },
+        body: JSON.stringify(workoutData),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to add workout");
+      }
+      onWorkoutAdded();
+      setForm({
+        title: "",
+        category: "strength",
+        exercises: [{ name: "", sets: 0, reps: 0, weight: 0, notes: "" }]
+      });
+    } catch (err) {
+      console.error("Error submitting workout:", err);
+    }
+  };
 
 
   const EXERCISE_OPTIONS = [

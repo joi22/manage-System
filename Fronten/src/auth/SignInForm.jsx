@@ -34,6 +34,7 @@ export default function SignInForm() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+      
         },
         body: JSON.stringify(formdata),
       });
@@ -42,9 +43,9 @@ export default function SignInForm() {
 
       if (response.ok && result?.status) {
         login({
-        user: data.user,
-        token: data.token
-      });
+          result: result.user,
+          resultToken: result.token,
+        });
         toast.success(result.message);
 
         // ✅ Redirect based on role
