@@ -41,11 +41,6 @@ let usercontroller = {
   },
   Login: async (req, res) => {
     const { email, password } = req.body;
-<<<<<<< HEAD
-
-=======
-    console.log(email, password);
->>>>>>> fdcc6b2b6d30e7c65dd5ed95d12fce4051350f7a
     if (!email || !password) {
       return res.status(400).json({
         message: "Please fill all the fields",
@@ -102,7 +97,7 @@ let usercontroller = {
       });
     }
   },
-  const updateUsers = async (req, res) => {
+  updateUsers: async (req, res) => {
   const { id } = req.params;
   const { email, profile_img, password } = req.body;
 
