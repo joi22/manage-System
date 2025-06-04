@@ -41,7 +41,11 @@ let usercontroller = {
   },
   Login: async (req, res) => {
     const { email, password } = req.body;
+<<<<<<< HEAD
 
+=======
+    console.log(email, password);
+>>>>>>> fdcc6b2b6d30e7c65dd5ed95d12fce4051350f7a
     if (!email || !password) {
       return res.status(400).json({
         message: "Please fill all the fields",
@@ -98,42 +102,53 @@ let usercontroller = {
       });
     }
   },
-  updateUsers: async (req, res) => {
-    const { id } = req.params;
-    const { email, profile_imag, password } = req.body;
-    console.log(email, profile_imag, password);
-    try {
-      const updateData = {
-        email,
-        profile_imag,
-      };
+  const updateUsers = async (req, res) => {
+  const { id } = req.params;
+  const { email, profile_img, password } = req.body;
 
-      if (password && password.length >= 6) {
-        updateData.password = await bcrypt.hash(password, 10);
-      } else if (password && password.length < 6) {
+  try {
+    const updateData = {
+      email,
+      profile_img, // ✅ match your DB schema (use either profile_img or profileImage)
+    };
+
+    // Optional: Handle password update securely
+    if (password) {
+      if (password.trim().length < 6) {
         return res.status(400).json({
-          message: "password must be at least 6 characters",
+          message: "Password must be at least 6 characters",
           status: false,
         });
       }
 
-      const updatedUser = await User.findByIdAndUpdate(id, updateData, {
-        new: true,
-      }).select("-password");
+      updateData.password = await bcrypt.hash(password, 10);
+    }
 
-      res.status(200).json({
-        message: "Profile updated successfully",
-        status: true,
-        user: updatedUser,
-      });
-    } catch (error) {
-      console.error("Update Error:", error);
-      res.status(500).json({
-        message: "Error updating profile",
+    const updatedUser = await User.findByIdAndUpdate(id, updateData, {
+      new: true,
+    }).select("-password");
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        message: "User not found",
         status: false,
       });
     }
-  },
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      status: true,
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Update Error:", error);
+    res.status(500).json({
+      message: "Error updating profile",
+      status: false,
+    });
+  }
+}
+    
 };
 
 module.exports = usercontroller;
