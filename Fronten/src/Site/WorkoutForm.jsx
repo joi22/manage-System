@@ -4,8 +4,8 @@ import { UserContext } from "../context/UserContextProvider";
 import { toast } from "sonner";
 
 const WorkoutForm = ({ onWorkoutAdded }) => {
-  const { user } = useContext(UserContext);
-
+  const { user , token } = useContext(UserContext);
+console.log(token)
   const [form, setForm] = useState({
     title: "",
     category: "Strength",
@@ -27,31 +27,29 @@ const WorkoutForm = ({ onWorkoutAdded }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const workoutData = { ...form };
-      const token = localStorage.getItem("resultToken"); // ✅
 
-      const response = await fetch("http://localhost:3000/api/workout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // ✅ include token
-        },
-        body: JSON.stringify(workoutData),
-      });
-      const result = await response.json();
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to add workout");
-      }
-      onWorkoutAdded();
-      setForm({
-        title: "",
-        category: "strength",
-        exercises: [{ name: "", sets: 0, reps: 0, weight: 0, notes: "" }]
-      });
-    } catch (err) {
-      console.error("Error submitting workout:", err);
+    const workoutData = { ...form };
+    const token = localStorage.getItem("token"); // ✅
+
+    const response = await fetch("http://localhost:3000/api/workout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // ✅ include token
+      },
+      body: JSON.stringify(workoutData),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to add workout");
     }
+    onWorkoutAdded();
+    setForm({
+      title: "",
+      category: "strength",
+      exercises: [{ name: "", sets: 0, reps: 0, weight: 0, notes: "" }]
+    });
+
   };
 
 

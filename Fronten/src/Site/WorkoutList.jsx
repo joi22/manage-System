@@ -1,21 +1,28 @@
-// src/pages/WorkoutList.jsx
 import React, { useEffect, useState, useContext } from 'react';
 import { UserContext } from '../context/UserContextProvider';
 
 const WorkoutList = () => {
   const [workouts, setWorkouts] = useState([]);
   const { user } = useContext(UserContext);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        const response = await fetch('/api/workout', {
+        const response = await fetch('http://localhost:3000/api/workout', {
           headers: {
-            Authorization: `Bearer ${user?.token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
+
         const data = await response.json();
-        setWorkouts(data);
+
+        if (response.ok) {
+          setWorkouts(data.workouts || []);
+        } else {
+          console.error('Error fetching workouts:', data.message);
+        }
+
       } catch (error) {
         console.error('Failed to fetch workouts:', error);
       }
@@ -24,28 +31,32 @@ const WorkoutList = () => {
     if (user) {
       fetchWorkouts();
     }
-  }, [user]);
+  }, [user, token]);
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Your Workouts</h2>
+    <div className="p-4 bg-gray-100 min-h-screen">
+      <h2 className="text-2xl font-bold mb-4">Your Workouts</h2>
       {workouts.length === 0 ? (
         <p>No workouts found.</p>
       ) : (
         <ul className="space-y-4">
           {workouts.map((workout) => (
-            <li
-              key={workout._id}
-              className="p-4 border rounded-md shadow-md bg-white"
-            >
+            <li key={workout._id} className="p-4 border rounded-md shadow-md bg-white">
               <h3 className="text-lg font-semibold">{workout.title}</h3>
-              <p>Category: {workout.category}</p>
-              <p>Sets: {workout.sets}</p>
-              <p>Reps: {workout.reps}</p>
-              <p className="text-sm text-gray-500">
-                Date: {new Date(workout.date).toLocaleDateString()}
+              <p className="text-sm text-gray-500 mb-2">Category: {workout.category}</p>
+
+              <div className="space-y-1">
+                {workout.exercises.map((ex, index) => (
+                  <div key={index} className="text-sm text-gray-700">
+                    • {ex.name} — {ex.sets} sets x {ex.reps} reps @ {ex.weight}kg
+                    {ex.notes && <span className="text-gray-500"> ({ex.notes})</span>}
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-xs text-gray-400 mt-2">
+                Date: {new Date(workout.createdAt).toLocaleDateString()}
               </p>
-              {/* 🗑️ Delete/Edit buttons can go here */}
             </li>
           ))}
         </ul>
