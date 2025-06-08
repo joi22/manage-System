@@ -9,6 +9,8 @@ import Blog from "./Site/Blog.jsx";
 import WorkoutPage from "./Site/WorkoutPage.jsx";
 import Dashboard from "./Dashbord/Dashboard.jsx";
 import WorkoutList from "./Site/WorkoutList.jsx";
+import OnboardingStepper from "./Site/OnboardingStepper.jsx";
+import Profile from "./Site/Profile.jsx";
 // import Dashboard_Layout from "./Pages/Components/Dashborad/Dashboard_Layout.jsx";
 // import Profile from "./Pages/Profile.jsx";
 
@@ -35,7 +37,7 @@ function App() {
           path: '/profile',
           element: (
 
-            <WorkoutList />
+            <Profile />
           ),
         },
         {
@@ -48,14 +50,14 @@ function App() {
         {
           path: '/workouts',
           element: (
+            <OnboardingStepper />
 
-            <WorkoutPage/>
           ),
         },
         {
           path: '/dashboard',
           element: (
-            <Dashboard/>
+            <Dashboard />
 
           ),
         },

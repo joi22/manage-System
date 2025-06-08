@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ FIXED: Correct import
 
-export default function TrainingRoutineForm({ userId, onBack }) {
+export default function TrainingRoutineForm({ userId, onBack, onNext }) {
     const [routine, setRoutine] = useState("");
+    const navigate = useNavigate(); // ✅ FIXED: Add parentheses to invoke the hook
 
     const options = [
         "No routine",
@@ -13,9 +15,8 @@ export default function TrainingRoutineForm({ userId, onBack }) {
 
     const handleSubmit = async () => {
         try {
-            await axios.post("http://localhost:3000/api/routine", { userId, routine });
-            alert("Onboarding Complete!");
-            // Redirect to dashboard or homepage
+            await axios.post("http://localhost:3000/api/onboarding/routine", { userId, routine });
+            onNext()
         } catch (err) {
             console.error(err);
         }

@@ -14,7 +14,7 @@ export default function StrengthExperienceForm({ userId, onNext, onBack }) {
 
     const handleSubmit = async () => {
         try {
-            await axios.post("http://localhost:3000/api/experience", { userId, experience });
+            await axios.post("http://localhost:3000/api/onboarding/experience", { userId, experience });
             onNext();
         } catch (err) {
             console.error(err);

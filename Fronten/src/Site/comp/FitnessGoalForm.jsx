@@ -18,7 +18,8 @@ export default function FitnessGoalForm({ userId, onNext }) {
     useEffect(() => {
         const fetchGoal = async () => {
             try {
-                const res = await axios.get(`http://localhost:3000/api/goals/${userId}`);
+                const res = await axios.get(`http://localhost:3000/api/onboarding/goals/${userId}`);
+                console.log(res)
                 if (res.data?.goal) {
                     setSelected(res.data.goal);
                 }
@@ -34,7 +35,7 @@ export default function FitnessGoalForm({ userId, onNext }) {
         const finalGoal = selected === "Other" ? customGoal : selected;
 
         try {
-            await axios.post("http://localhost:3000/api/goals", {
+            await axios.post("http://localhost:3000/api/onboarding/goals", {
                 userId,
                 goal: finalGoal,
             });

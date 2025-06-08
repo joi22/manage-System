@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 // import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../icons";
 import Label from "../common/form/Label";
 import Input from "../common/form/InputField";
@@ -9,6 +9,7 @@ import Button from "../common/form/Button";
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const navgate = useNavigate()
   const ref = useRef()
   const Frist_nameRef = useRef()
   const Last_nameRef = useRef()
@@ -37,10 +38,12 @@ export default function SignUpForm() {
     });
 
     const result = await response.json();
+
     console.log(result, "check API is Working");
 
     if (result.status) {
       toast.success(result.message);
+      navgate('/login')
     } else {
       toast.error(result.message);
     }    // const response = await axios.get("http://localhost:3000/")

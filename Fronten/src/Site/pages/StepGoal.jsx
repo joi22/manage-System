@@ -34,7 +34,7 @@ export default function StepGoal() {
     };
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/api/goals/${userId}`)
+        axios.get(`http://localhost:3000/api/onboarding/goals/${userId}`)
             .then(res => {
                 if (res.data?.goal) setSelected(res.data.goal);
             })

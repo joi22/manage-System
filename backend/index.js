@@ -9,6 +9,7 @@ const nutritionRouter = require('./Router/nutrition_Rout');
 const progressRouter = require('./Router/progress_Rout');
 const Blog_routs = require('./Router/Blog_routs');
 
+const onboardingRoutes = require('./Router/onboarding_Route.js');
 const dashboard_Route = require('./Router/dashboard_Route');
 
 
@@ -27,7 +28,7 @@ app.use("/api/workout", workoutRouter);
 app.use("/api/nutrition", nutritionRouter);
 app.use("/api/progress", progressRouter);
 app.use("/api", Blog_routs);
-
+app.use('/api/onboarding', onboardingRoutes);
 app.use("/api/", dashboard_Route);
 
 
