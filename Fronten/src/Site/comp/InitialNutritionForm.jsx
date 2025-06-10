@@ -114,7 +114,7 @@ export default function InitialNutritionForm({ userId, onNext }) {
           })),
         })),
       });
-      onNext();
+    
     } catch (error) {
       console.error("Error submitting nutrition log:", error);
     }

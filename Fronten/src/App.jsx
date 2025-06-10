@@ -12,7 +12,8 @@ import WorkoutList from "./Site/WorkoutList.jsx";
 import OnboardingStepper from "./Site/OnboardingStepper.jsx";
 import Profile from "./Site/Profile.jsx";
 import Analytics from "./Dashbord/Analytics.jsx";
-// import Dashboard_Layout from "./Pages/Components/Dashborad/Dashboard_Layout.jsx";
+import Dashboard_Layout from "./Dashbord/Dashboard_Layout.jsx";
+import NotificationsPage from "./Componantes/NotificationsPage.jsx";
 // import Profile from "./Pages/Profile.jsx";
 
 
@@ -55,16 +56,24 @@ function App() {
 
           ),
         },
-        {
-          path: '/dashboard',
-          element: (
-            <Dashboard />
 
-          ),
-        },
       ],
-    },
 
+    },
+    {
+      path: '/dashboard',
+      element: <Dashboard_Layout />,
+      children: [
+        {
+          index: true, // equivalent to "/dashboard"
+          element: <Dashboard />
+        },
+        {
+          path: 'notifications', // ✅ relative path, resolves to "/dashboard/notifications"
+          element: <NotificationsPage />
+        },
+      ]
+    }
 
   ]);
 

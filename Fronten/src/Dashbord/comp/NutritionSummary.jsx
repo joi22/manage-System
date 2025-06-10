@@ -1,15 +1,17 @@
 import { PieChart, Pie, Cell, Legend, ResponsiveContainer } from "recharts";
 
-const COLORS = ["#8884d8", "#82ca9d", "#ffc658"]; // You can tweak these
+const COLORS = ["#8884d8", "#82ca9d", "#ffc658"]; // Protein, Carbs, Fat
 
 const NutritionSummary = ({ data }) => {
   if (!data) return <div className="bg-white p-4 rounded shadow">No nutrition data</div>;
 
   const macroTotals = data.meals?.reduce(
     (acc, meal) => {
-      acc.protein += meal.protein || 0;
-      acc.carbs += meal.carbs || 0;
-      acc.fat += meal.fat || 0;
+      meal.items?.forEach(item => {
+        acc.protein += item.macros?.protein || 0;
+        acc.carbs += item.macros?.carbs || 0;
+        acc.fat += item.macros?.fat || 0;
+      });
       return acc;
     },
     { protein: 0, carbs: 0, fat: 0 }

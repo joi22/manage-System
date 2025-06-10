@@ -1,4 +1,3 @@
-// src/components/comp/NutritionMacrosChart.jsx
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28"]; // Carbs, Protein, Fat
@@ -6,12 +5,16 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28"]; // Carbs, Protein, Fat
 const NutritionMacrosChart = ({ data }) => {
   if (!data || data.length === 0) return <p>No nutrition data available</p>;
 
-  // Aggregate macros
+  // Aggregate macros across all logs
   const totals = data.reduce(
     (acc, log) => {
-      acc.carbs += log.carbs || 0;
-      acc.protein += log.protein || 0;
-      acc.fat += log.fat || 0;
+      log.meals?.forEach(meal => {
+        meal.items?.forEach(item => {
+          acc.carbs += item.macros?.carbs || 0;
+          acc.protein += item.macros?.protein || 0;
+          acc.fat += item.macros?.fat || 0;
+        });
+      });
       return acc;
     },
     { carbs: 0, protein: 0, fat: 0 }

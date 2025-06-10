@@ -11,6 +11,7 @@ const Blog_routs = require('./Router/Blog_routs');
 
 const onboardingRoutes = require('./Router/onboarding_Route.js');
 const dashboard_Route = require('./Router/dashboard_Route');
+const notificationRoutes  = require('./Router/Notification_Route.js');
 
 
 
@@ -30,7 +31,7 @@ app.use("/api/progress", progressRouter);
 app.use("/api", Blog_routs);
 app.use('/api/onboarding', onboardingRoutes);
 app.use("/api/", dashboard_Route);
-
+app.use('/api/notifications', notificationRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello, world!');

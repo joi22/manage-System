@@ -1,17 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { UserContext } from "../context/UserContextProvider";
+
+// Updated components
 import NutritionMacrosChart from "./comp/NutritionMacrosChart";
-import ProgressChart from "./comp/ProgressChart";
+import NutritionSummary from "./comp/NutritionSummary";
 import WorkoutCategoryChart from "./comp/WorkoutCategoryChart";
+import WorkoutCard from "./comp/WorkoutCard";
+import ProgressChart from "./comp/ProgressChart";
+import WeightProgressChart from "./comp/WeightProgressChart";
+import ProgressSummary from "./comp/ProgressSummary";
 
 const Analytics = () => {
   const { user } = useContext(UserContext);
   const [nutritionLogs, setNutritionLogs] = useState([]);
-  const [progressLogs, setProgressLogs] = useState([]);
-  const [workouts, setWorkouts] = useState([]);
-
-  useEffect(() => {
+    const [progressLogs, setProgressLogs] = useState([]);
+    const [workouts, setWorkouts] = useState([]);
+    
+    useEffect(() => {
     if (!user?._id) return;
 
     const fetchData = async () => {
@@ -22,63 +28,64 @@ const Analytics = () => {
           axios.get(`http://localhost:3000/api/workout/${user._id}`),
         ]);
 
-        const nutLogs = nutRes?.data;
-        const progLogs = progRes.data.logs;
-        const workoutData = workRes?.data?.workouts;
-        console.log(progLogs)
-        console.log(workoutData)
-        setNutritionLogs(Array.isArray(nutLogs) ? nutLogs : []);
-        setProgressLogs(Array.isArray(progLogs) ? progLogs : []);
-        setWorkouts(Array.isArray(workoutData) ? workoutData : []);
+        // Assuming nutRes.data.log is a single log object (not array)
+        const logs = Array.isArray(nutRes.data.log)
+          ? nutRes.data.log
+          : nutRes.data.log
+          ? [nutRes.data.log]
+          : [];
+
+        setNutritionLogs(logs);
+        setProgressLogs(Array.isArray(progRes.data.logs) ? progRes.data.logs : []);
+        setWorkouts(Array.isArray(workRes?.data?.workouts) ? workRes.data.workouts : []);
+
+        console.log("Nutrition Logs:", nutRes.data
+  );
       } catch (err) {
         console.error("Analytics data fetch failed:", err);
       }
     };
 
-
-
     fetchData();
   }, [user]);
-  // Transform nutrition logs to chart-friendly data
-  const nutritionChartData = nutritionLogs.map((log) => ({
+
+    // Chart-friendly progress data
+    const progressChartData = progressLogs.map(log => ({
+      date: log.date,
+      weight: log.weight,
+      bodyFat: log.bodyFat,
+    }));
+  const nurtionChartData = nutritionLogs.map(log => ({
     date: log.date,
-    calories: log.calories,
-    protein: log.protein,
-    carbs: log.carbs,
-    fat: log.fat,
+    meals: log.meals,
+    userId : log.userId,
+
+
   }));
-
-  // Transform progress logs to chart-friendly data
-  const progressChartData = progressLogs.map((log) => ({
-    date: log.date,
-    weight: log.weight,
-    muscleMass: log.muscleMass,
-    bodyFat: log.bodyFat,
-  }));
-
-  // Aggregate workouts by category for pie/bar chart
-  const workoutCategoryCount = workouts.reduce((acc, workout) => {
-    acc[workout.category] = (acc[workout.category] || 0) + 1;
-    return acc;
-  }, {});
-
-  // Convert category counts to array for charts
-  const workoutCategoryData = Object.entries(workoutCategoryCount).map(
-    ([category, count]) => ({
-      category,
-      count,
-    })
-  );
+  console.log(nurtionChartData, "this ")
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 " style={{color:"black"}}>
       <h2 className="text-2xl font-bold mb-4">Fitness Analytics</h2>
 
-      <NutritionMacrosChart data={nutritionChartData} />
-      <ProgressChart data={progressChartData} />
-      <WorkoutCategoryChart data={workoutCategoryData} />
+      {/* Nutrition Section */}
+      <div className="grid md:grid-cols-2 gap-4">
+        <NutritionMacrosChart data={nutritionLogs} />
+        <NutritionSummary data={nutritionLogs[0]} />
+      </div>
 
-      {/* Add any additional analytics or summary here */}
+      {/* Progress Section */}
+      <div className="grid md:grid-cols-2 gap-4">
+        <ProgressChart data={progressChartData} />
+        <WeightProgressChart data={progressLogs} />
+      </div>
+      {progressLogs.length > 0 && <ProgressSummary data={progressLogs[progressLogs.length - 1]} />}
+
+      {/* Workout Section */}
+      <div className="grid md:grid-cols-2 gap-4">
+        <WorkoutCategoryChart workouts={workouts} />
+        <WorkoutCard workouts={workouts} />
+      </div>
     </div>
   );
 };
