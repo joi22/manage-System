@@ -28,6 +28,7 @@ export default function ExerciseList() {
       <div className="mb-6 flex flex-wrap gap-4 items-center justify-center sm:justify-start">
         <label htmlFor="type" className="font-semibold">Filter by Type:</label>
         <select
+        style={{background:"#1B1C2B"}}
           id="type"
           value={type}
           onChange={(e) => setType(e.target.value)}

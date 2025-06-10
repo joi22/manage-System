@@ -27,13 +27,13 @@ const workoutController = {
 
   // Get all workouts for the logged-in user
   getUserWorkouts: async (req, res) => {
-    try {
-      const workouts = await Workout.find({ userId: req.user.id });
-      res.status(200).json({ status: true, workouts });
-    } catch (error) {
-      res.status(500).json({ message: "Error fetching workouts", error });
-    }
-  },
+  try {
+    const workouts = await Workout.find({ userId: req.params.id }); // ✅ changed here
+    res.status(200).json({ status: true, workouts });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching workouts", error });
+  }
+},
 
   // Update a workout by ID
   updateWorkout: async (req, res) => {

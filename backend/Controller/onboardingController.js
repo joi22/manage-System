@@ -7,7 +7,6 @@ const onboardingStep1 = async (req, res) => {
     console.log(req.body)
     const { userId, goal, experience } = req.body;
 
-
     if (!goal || !userId) {
       return res.status(400).json({ message: 'Goal, experience, and userId are required' });
     }

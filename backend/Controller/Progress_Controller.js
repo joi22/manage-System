@@ -17,17 +17,18 @@ const progressController = {
     }
   },
 
-  getProgress: async (req, res) => {
-    try {
-      const userId = req.query.userId; // get userId from query string
-      if (!userId) return res.status(400).json({ message: "User ID is required" });
+getProgress: async (req, res) => {
+  try {
 
-      const logs = await Progress.find({ userId }).sort({ date: -1 });
-      res.status(200).json({ status: true, logs });
-    } catch (error) {
-      res.status(500).json({ message: "Error fetching progress logs", error });
-    }
-  },
+    const userId = req.params.userId;
+    if (!userId) return res.status(400).json({ message: "User ID is required" });
+
+    const logs = await Progress.find({ userId }).sort({ date: -1 });
+    res.status(200).json({ status: true, logs });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching progress logs", error });
+  }
+},
 
   updateProgress: async (req, res) => {
     try {

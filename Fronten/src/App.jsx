@@ -11,6 +11,7 @@ import Dashboard from "./Dashbord/Dashboard.jsx";
 import WorkoutList from "./Site/WorkoutList.jsx";
 import OnboardingStepper from "./Site/OnboardingStepper.jsx";
 import Profile from "./Site/Profile.jsx";
+import Analytics from "./Dashbord/Analytics.jsx";
 // import Dashboard_Layout from "./Pages/Components/Dashborad/Dashboard_Layout.jsx";
 // import Profile from "./Pages/Profile.jsx";
 
@@ -44,7 +45,7 @@ function App() {
           path: '/blog',
           element: (
 
-            <Blog />
+            <Analytics />
           ),
         },
         {

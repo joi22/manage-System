@@ -76,7 +76,8 @@ export default function FitnessGoalForm({ userId, onNext }) {
 
             <button
                 onClick={handleSubmit}
-                className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg"
+                style={{background:"#F54770"}}
+                className="mt-6 w-full cursor-pointer text-white font-semibold py-2 px-4 rounded-lg"
             >
                 Save Goal
             </button>

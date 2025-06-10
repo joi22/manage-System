@@ -3,10 +3,11 @@ const Nutrition = require("../Model/Nutrition");
 const nutritionController = {
   // Add a new nutrition log
   addLog: async (req, res) => {
+    console.log(req.body.userId)
     try {
       const log = new Nutrition({
         ...req.body,
-        userId: req.user.id,
+        userId: req.body.userId,
       });
       await log.save();
       res.status(201).json({ message: "Nutrition log created", status: true, log });
@@ -49,13 +50,14 @@ const nutritionController = {
     }
   },
   getLatestLog: async (req, res) => {
-  try {
-    const log = await Nutrition.findOne({ userId: req.user.id }).sort({ date: -1 });
-    res.status(200).json({ status: true, log });
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching latest nutrition log", error });
-  }
-},
+    console.log( req.params.id)
+    try {
+      const log = await Nutrition.findOne({ userId: req.params.id }).sort({ date: -1 }); // ✅ using req.user.id
+      res.status(200).json({ status: true, log });
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching latest nutrition log", error });
+    }
+  },
 };
 
 module.exports = nutritionController;
