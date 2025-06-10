@@ -31,7 +31,7 @@ app.use("/api/progress", progressRouter);
 app.use("/api", Blog_routs);
 app.use('/api/onboarding', onboardingRoutes);
 app.use("/api/", dashboard_Route);
-app.use('/api/notifications', notificationRoutes);
+app.use('/api/notifications',notificationRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello, world!');

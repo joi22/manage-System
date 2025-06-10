@@ -3,7 +3,7 @@ import { useState } from "react";
 
 const mealTypes = ["breakfast", "lunch", "dinner", "snack"];
 
-export default function InitialNutritionForm({ userId, onNext }) {
+export default function InitialNutritionForm({ userId, onFinish }) {
   const [notes, setNotes] = useState("");
   const [meals, setMeals] = useState([
     { type: "breakfast", items: [{ name: "", quantity: "", calories: "", macros: { protein: "", carbs: "", fat: "" } }] },
@@ -20,12 +20,12 @@ export default function InitialNutritionForm({ userId, onNext }) {
       meals.map((meal) =>
         meal.type === mealType
           ? {
-              ...meal,
-              items: [
-                ...meal.items,
-                { name: "", quantity: "", calories: "", macros: { protein: "", carbs: "", fat: "" } },
-              ],
-            }
+            ...meal,
+            items: [
+              ...meal.items,
+              { name: "", quantity: "", calories: "", macros: { protein: "", carbs: "", fat: "" } },
+            ],
+          }
           : meal
       )
     );
@@ -114,7 +114,8 @@ export default function InitialNutritionForm({ userId, onNext }) {
           })),
         })),
       });
-    
+      onFinish();
+
     } catch (error) {
       console.error("Error submitting nutrition log:", error);
     }

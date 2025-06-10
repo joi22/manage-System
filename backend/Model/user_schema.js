@@ -19,12 +19,16 @@ const userSchema = new mongoose.Schema(
     },
     profile_img: {
       type: String,
-      default:"default-avatar.png"
+      default: "default-avatar.png",
     },
     role: {
       type: String,
       enum: ["admin", "user", "employee"],
       default: "user",
+    },
+    onboardingComplete: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

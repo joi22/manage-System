@@ -86,9 +86,30 @@ const getGoal = async (req, res) => {
   }
 };
 
+const markOnboardingComplete = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { onboardingComplete: true },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json({ message: "Onboarding marked complete." });
+  } catch (error) {
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
 module.exports = {
   onboardingStep1,
   onboardingStep2,
   onboardingStep3,
-  getGoal
+  getGoal,
+  markOnboardingComplete
 };
