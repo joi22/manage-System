@@ -81,6 +81,14 @@ function App() {
           path: 'notifications', // ✅ relative path, resolves to "/dashboard/notifications"
           element: <NotificationsPage />
         },
+        {
+          path: 'analytics', // ✅ relative path, resolves to "/dashboard/notifications"
+          element: <Analytics/>
+        },
+        {
+          path: 'nutrition', // ✅ relative path, resolves to "/dashboard/notifications"
+          element: ""
+        },
       ]
     }
 

@@ -228,7 +228,7 @@ export default function InitialNutritionForm({ userId, onFinish }) {
 
       <button
         onClick={handleSubmit}
-        className="mt-4 w-full bg-[#e60076]  py-2 px-4 rounded hover:bg-green-700"
+        className="mt-4 w-full bg-[#e60076]  py-2 px-4 rounded "
       >
         Submit
       </button>
