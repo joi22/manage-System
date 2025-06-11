@@ -19,13 +19,37 @@ const Navbar = () => {
   );
 
   return (
-    <header style={{position:"relative"}} className="bg-[#14121F] position-relative text-white px-4 sm:px-6 md:px-12 lg:px-16 py-4 shadow-md fixed top-0 w-full z-50">
+    <header style={{ position: "relative" }} className="bg-[#14121F] position-relative text-white px-4 sm:px-6 md:px-12 lg:px-16 py-4 shadow-md fixed top-0 w-full z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
+
+
+        {/* Logo */}
+        <div className="text-xl md:text-2xl font-bold">
+          <a href="/">Fitbod</a>
+        </div>
+
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex space-x-6  font-medium">
+          <a href="/" className="hover:text-pink-500 transition">Home</a>
+          <a href="/exercises" className="hover:text-pink-500 transition">Exercises</a>
+          <a href="/blog" className="hover:text-pink-500 transition">Blog</a>
+          <a href="/about" className="hover:text-pink-500 transition">About</a>
+          <a href="/contact" className="hover:text-pink-500 transition">Contact Us</a>
+        </nav>
         {/* Left side - Login/Profile */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-center gap-4">
           {user ? (
-            <a href="/profile" className="p-2 bg-gray-800 rounded-full hover:bg-gray-700 transition">
-              <ProfileIcon />
+            <a href="/profile" className="p-2  rounded-full text-center transition">
+               <img
+              src={user?.profile_img ? `/upload/${user.profile_img}` : "/default-profile.png"}
+              alt="Profile"
+              className="w-15 h-15 rounded-full object-cover border-4 border-white"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "/default-profile.png";
+              }}
+            />
+            {/* <p>{user.lastname}</p> */}
             </a>
           ) : (
             <a
@@ -36,21 +60,6 @@ const Navbar = () => {
             </a>
           )}
         </div>
-
-        {/* Logo */}
-        <div className="text-xl md:text-2xl font-bold">
-          <a href="/">Fitbod</a>
-        </div>
-
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex space-x-6 text-sm font-medium">
-          <a href="/" className="hover:text-pink-500 transition">Home</a>
-          <a href="/exercises" className="hover:text-pink-500 transition">Exercises</a>
-          <a href="/blog" className="hover:text-pink-500 transition">Blog</a>
-          <a href="/about" className="hover:text-pink-500 transition">About</a>
-          <a href="/contact" className="hover:text-pink-500 transition">Contact Us</a>
-        </nav>
-
         {/* Mobile Hamburger */}
         <div className="md:hidden">
           <button onClick={toggleMenu} className="focus:outline-none">
@@ -77,6 +86,8 @@ const Navbar = () => {
           )}
         </div>
       )}
+
+
     </header>
   );
 };

@@ -46,14 +46,16 @@ export default function SignInForm() {
           result: result.user,
           resultToken: result.token,
         });
-        toast.success(result.message);
-
-        // ✅ Redirect based on role
-        if (result.user.Role === "admin") {
+        console.log(result.user.role)
+        if (result.user.role === "admin") {
           navigate("/dashboard");
         } else {
           navigate("/");
         }
+        toast.success(result.message);
+
+        // ✅ Redirect based on role
+        
       } else {
         toast.error(result.message || "Login failed. Please try again.");
       }

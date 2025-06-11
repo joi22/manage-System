@@ -47,7 +47,7 @@ const handleSubmit = async () => {
       />
       <div className="flex justify-between">
         {/* <button onClick={onSkip} className="btn-secondary">Skip</button> */}
-        <button onClick={handleSubmit} className="btn-primary">Next</button>
+        <button onClick={handleSubmit} style={{background:"#e60076"}} className="btn-primary">Next</button>
       </div>
     </div>
   );

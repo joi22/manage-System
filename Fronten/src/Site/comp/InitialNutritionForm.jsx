@@ -217,7 +217,8 @@ export default function InitialNutritionForm({ userId, onFinish }) {
               <button
                 key={type}
                 onClick={() => addMeal(type)}
-                className="bg-green-600 px-3 py-1 rounded text-white"
+               style={{}}
+                className=" bg-[#e60076] px-3 py-1 rounded text-white"
               >
                 Add {type.charAt(0).toUpperCase() + type.slice(1)}
               </button>
@@ -227,7 +228,7 @@ export default function InitialNutritionForm({ userId, onFinish }) {
 
       <button
         onClick={handleSubmit}
-        className="mt-4 w-full bg-green-600 py-2 px-4 rounded hover:bg-green-700"
+        className="mt-4 w-full bg-[#e60076]  py-2 px-4 rounded hover:bg-green-700"
       >
         Submit
       </button>

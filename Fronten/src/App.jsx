@@ -14,6 +14,8 @@ import Profile from "./Site/Profile.jsx";
 import Analytics from "./Dashbord/Analytics.jsx";
 import Dashboard_Layout from "./Dashbord/Dashboard_Layout.jsx";
 import NotificationsPage from "./Componantes/NotificationsPage.jsx";
+import ExerciseList from "./Site/comp/ExerciseList.jsx";
+import ProfileEditPage from "./Site/ProfileEditPage.jsx";
 // import Profile from "./Pages/Profile.jsx";
 
 
@@ -43,14 +45,21 @@ function App() {
           ),
         },
         {
-          path: '/blog',
+         path: '/update-profile/:id',
           element: (
 
-            <Analytics />
+            <ProfileEditPage />
           ),
         },
         {
-          path: '/workouts',
+          path: '/blog',
+          element: (
+
+            <ExerciseList/>
+          ),
+        },
+        {
+          path: '/exercises',
           element: (
             <OnboardingStepper />
 

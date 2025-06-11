@@ -97,17 +97,24 @@ let usercontroller = {
       });
     }
   },
-  updateUsers: async (req, res) => {
+updateUsers: async (req, res) => {
   const { id } = req.params;
-  const { email, profile_img, password } = req.body;
+  const { firstname, lastname, email, password } = req.body;
+
+  console.log("req.body:", req.body); // ✅ should now log correctly
+  console.log("req.file:", req.file); // ✅ will log uploaded file info
 
   try {
     const updateData = {
+      firstname,
+      lastname,
       email,
-      profile_img, // ✅ match your DB schema (use either profile_img or profileImage)
     };
 
-    // Optional: Handle password update securely
+    if (req.file) {
+      updateData.profile_img = req.file.filename;
+    }
+
     if (password) {
       if (password.trim().length < 6) {
         return res.status(400).json({
@@ -115,7 +122,6 @@ let usercontroller = {
           status: false,
         });
       }
-
       updateData.password = await bcrypt.hash(password, 10);
     }
 
@@ -133,7 +139,7 @@ let usercontroller = {
     res.status(200).json({
       message: "Profile updated successfully",
       status: true,
-      user: updatedUser,
+      updatedUser,
     });
   } catch (error) {
     console.error("Update Error:", error);
@@ -142,8 +148,7 @@ let usercontroller = {
       status: false,
     });
   }
-}
-    
+},
 };
 
 module.exports = usercontroller;

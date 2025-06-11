@@ -1,12 +1,17 @@
-const   express = require('express')
-
-const usercontroller = require('../Controller/user_controller')
-
-const router= express.Router()
-
-router.post('/register', usercontroller.register)
-router.post('/login', usercontroller.Login)
-router.put('/update/:id', usercontroller.updateUsers)
+// routes/user_route.js
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const usercontroller = require("../Controller/user_controller");
+const upload = require('../Config/multer_config'); 
+const router = express.Router();
 
 
-module.exports=router
+
+
+// Routes
+router.post("/register", usercontroller.register);
+router.post("/login", usercontroller.Login);
+router.put('/update/:id', upload.single('profile_img'), usercontroller.updateUsers);
+
+module.exports = router;
