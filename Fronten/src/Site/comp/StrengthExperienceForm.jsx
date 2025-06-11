@@ -40,7 +40,7 @@ export default function StrengthExperienceForm({ userId, onNext, onBack }) {
             </div>
             <div className="mt-6 flex justify-between">
                 <button onClick={onBack} className="bg-gray-600 px-4 py-2 rounded-lg">Back</button>
-                <button onClick={handleSubmit} style={{background:"#1B1C2B"}} className=" px-4 py-2 rounded-lg">Next</button>
+                <button onClick={handleSubmit} style={{background:"#e60076"}} className=" px-4 py-2 rounded-lg">Next</button>
             </div>
         </div>
     );

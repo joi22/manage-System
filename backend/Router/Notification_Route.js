@@ -1,6 +1,5 @@
-// routes/notification.routes.js
-import express from 'express';
-import Notification from '../Model/Notification';
+const express = require("express");
+const Notification = require('../Model/Notification')
 
 const router = express.Router();
 
@@ -28,4 +27,4 @@ router.patch('/:notificationId/read', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router
