@@ -39,7 +39,7 @@ const Analytics = () => {
         setProgressLogs(Array.isArray(progRes.data.logs) ? progRes.data.logs : []);
         setWorkouts(Array.isArray(workRes?.data?.workouts) ? workRes.data.workouts : []);
 
-        console.log("Nutrition Logs:", nutRes.data
+        console.log("Nutrition Logs ===:", workRes?.data
   );
       } catch (err) {
         console.error("Analytics data fetch failed:", err);
