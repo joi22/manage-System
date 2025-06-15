@@ -8,6 +8,7 @@ const AppLayout = () => {
     <>
       <NaveBar />
       <Outlet />
+      
     </>
   )
 }

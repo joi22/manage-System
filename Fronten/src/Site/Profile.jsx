@@ -5,6 +5,7 @@ import FitnessGoalForm from "./comp/FitnessGoalForm";
 import { UserContext } from "../context/UserContextProvider";
 import ProgressSummary from "../Dashbord/comp/ProgressSummary";
 import WorkoutCard from "../Dashbord/comp/WorkoutCard";
+import ExportButtons from "../Componantes/ExportButtons";
 
 const Profile = () => {
   const { user, logout } = useContext(UserContext);
@@ -83,7 +84,7 @@ const Profile = () => {
           </div>
 
           <div className="space-x-2">
-            <Link to="/logout">
+            <Link to="/login">
               <button
                 onClick={() => {
                   logout();
@@ -99,6 +100,9 @@ const Profile = () => {
                 Go to Dashboard
               </button>
             </Link>
+            <button className="px-4 py-2 bg-white text-[#e60076] rounded font-semibold hover:bg-gray-200 transition">
+              </button>
+                <ExportButtons/>
           </div>
         </div>
 

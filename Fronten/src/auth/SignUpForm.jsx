@@ -62,7 +62,7 @@ export default function SignUpForm() {
         <div>
 
           <div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
+            {/* <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
               <button className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
                 <svg
                   width="20"
@@ -103,8 +103,8 @@ export default function SignUpForm() {
                 </svg>
                 Sign up with X
               </button>
-            </div>
-            <div className="relative py-3 sm:py-5">
+            </div> */}
+            {/* <div className="relative py-3 sm:py-5">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
               </div>
@@ -113,8 +113,15 @@ export default function SignUpForm() {
                   Or
                 </span>
               </div>
-            </div>
-            <form onSubmit={handleSubmit}>
+            </div> */}
+            <div className="mb-5 sm:mb-8">
+              <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
+                Sign Up
+              </h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Enter your email and password to sign up!
+              </p>
+            </div>            <form onSubmit={handleSubmit}>
               <div className="space-y-5">
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   {/* <!-- First Name --> */}
@@ -187,7 +194,7 @@ export default function SignUpForm() {
                 <div>
                   <Button
 
-                    className={`w-full px-4 py-3 text-sm font-medium rounded-lg transition shadow-theme-xs border
+                    className={`w-full px-4 py-3 text-sm cursor-pointer font-medium rounded-lg transition shadow-theme-xs border
                         bg-brand-500 hover:bg-brand-600 text-white border-transparent"
                         `}
                   >
@@ -202,7 +209,7 @@ export default function SignUpForm() {
                 Already have an account? {""}
                 <Link
                   to="/login"
-                  className="text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                  className="text-brand-500 hover:text-brand-600 cursor-pointer dark:text-brand-400"
                 >
                   Sign In
                 </Link>

@@ -12,6 +12,7 @@ const Blog_routs = require('./Router/Blog_routs');
 const onboardingRoutes = require('./Router/onboarding_Route.js');
 const dashboard_Route = require('./Router/dashboard_Route');
 const notificationRoutes  = require('./Router/Notification_Route.js');
+const ExoprtFile  = require('./Router/reportRoutes.js');
 
 
 
@@ -32,6 +33,7 @@ app.use("/api", Blog_routs);
 app.use('/api/onboarding', onboardingRoutes);
 app.use("/api/", dashboard_Route);
 app.use('/api/notifications',notificationRoutes);
+app.use('/api/reports/',ExoprtFile);
 
 app.get('/', (req, res) => {
   res.send('Hello, world!');

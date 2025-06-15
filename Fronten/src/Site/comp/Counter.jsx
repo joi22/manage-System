@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
+// import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 
 const Counter = () => {
  return (
@@ -9,10 +9,10 @@ const Counter = () => {
           {/* Rating */}
           <div>
             <div className="flex justify-center mb-2">
-              {[...Array(4)].map((_, i) => (
-                <FaStar key={i} className="text-pink-500 text-2xl" />
-              ))}
-              <FaStarHalfAlt className="text-pink-500 text-2xl" />
+              {/* {[...Array(4)].map((_, i) => (
+                // <FaStar key={i} className="text-pink-500 text-2xl" />
+              ))} */}
+              {/* <FaStarHalfAlt className="text-pink-500 text-2xl" /> */}
             </div>
             <p className="text-lg font-semibold">4.8 Rating</p>
           </div>
