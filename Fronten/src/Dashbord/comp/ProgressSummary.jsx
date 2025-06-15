@@ -15,6 +15,7 @@ const ProgressSummary = ({ data }) => {
       <div className="mb-2">
         <strong>Measurements:</strong>
         <ul className="list-disc pl-5 text-sm">
+          {console.log(data,"this")}
           {data.measurements && Object.entries(data.measurements).map(([key, value]) => (
             <li key={key}>{key}: {value} cm</li>
           ))}

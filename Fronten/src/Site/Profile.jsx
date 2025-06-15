@@ -35,7 +35,6 @@ const Profile = () => {
         setLoading(false);
       }
     };
-console.log(user)
     if (user?._id) {
       fetchOnboarding();
     }

@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const mealTypes = ["breakfast", "lunch", "dinner", "snack"];
 
 export default function InitialNutritionForm({ userId, onFinish }) {
   const [notes, setNotes] = useState("");
+  const navgation = useNavigate()
   const [meals, setMeals] = useState([
     { type: "breakfast", items: [{ name: "", quantity: "", calories: "", macros: { protein: "", carbs: "", fat: "" } }] },
   ]);
@@ -115,6 +117,7 @@ export default function InitialNutritionForm({ userId, onFinish }) {
         })),
       });
       onFinish();
+      navgation('/dashboard')
 
     } catch (error) {
       console.error("Error submitting nutrition log:", error);

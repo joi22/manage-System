@@ -11,7 +11,7 @@ import WorkoutCategoryChart from "./comp/WorkoutCategoryChart";
 import ProgressChart from "./comp/ProgressChart";
 import NutritionMacrosChart from "./comp/NutritionMacrosChart";
 import NotificationFeed from "../Componantes/NotificationsPage";
-// import SearchAndFilter from "./comp/SearchAndFilter";
+import SearchAndFilter from "../Componantes/SearchAndFilter";
 
 const Dashboard = () => {
   const { user } = useContext(UserContext);
@@ -28,34 +28,34 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         const [
-          // workoutRes,
+          workoutRes,
           nutritionLatestRes,
-          // nutritionLogsRes,
-          // progressLatestRes,
-          // progressLogsRes,
-          // notificationsRes,
+          nutritionLogsRes,
+          progressLatestRes,
+          progressLogsRes,
+          notificationsRes,
         ] = await Promise.all([
-          // axios.get(`http://localhost:3000/api/workout/${user._id}/recent`),
-          axios.get(`http://localhost:3000/api/nutrition/latest/${user._id}`),
-          // axios.get(`http://localhost:3000/api/nutrition/${user._id}`),
-          // axios.get(`http://localhost:3000/api/progress/${user._id}/latest`),
-          // axios.get(`http://localhost:3000/api/progress/${user._id}`),
-          // axios.get(`http://localhost:3000/api/notifications/${user._id}`),
+          axios.get(`/api/workout/${user._id}/recent`),
+          axios.get(`/api/nutrition/latest/${user._id}`),
+          axios.get(`/api/nutrition/${user._id}`),
+          axios.get(`/api/progress/${user._id}/latest`),
+          axios.get(`/api/progress/${user._id}`),
+          axios.get(`/api/notifications/${user._id}`),
         ]);
 
-        // setWorkouts(workoutRes.data.data);
-        // setFilteredWorkouts(workoutRes.data.data);
+        setWorkouts(workoutRes.data.data);
+        setFilteredWorkouts(workoutRes.data.data);
         setNutritionLatest(nutritionLatestRes.data.data);
-        // setNutritionLogs(nutritionLogsRes.data.logs);
-        // setProgressLatest(progressLatestRes.data.data);
-        // setProgressLogs(progressLogsRes.data.logs);
-        // setNotifications(notificationsRes.data.notifications);
+        setNutritionLogs(nutritionLogsRes.data.logs);
+        setProgressLatest(progressLatestRes.data.data);
+        setProgressLogs(progressLogsRes.data.logs);
+        setNotifications(notificationsRes.data.notifications);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       }
     };
 
-    fetchDashboardData();
+    if (user._id) fetchDashboardData();
   }, [user._id]);
 
   // Search/Filter Handler
@@ -83,10 +83,10 @@ const Dashboard = () => {
       <NotificationFeed notifications={notifications} />
 
       {/* Search + Filter */}
-      {/* <SearchAndFilter
+      <SearchAndFilter
         onSearchAndFilter={handleSearchAndFilter}
         availableCategories={["All", "Strength", "Cardio", "Mobility", "Other"]}
-      /> */}
+      />
 
       {/* Workouts */}
       <WorkoutCard workouts={filteredWorkouts || []} />
