@@ -100,8 +100,7 @@ const Profile = () => {
                 Go to Dashboard
               </button>
             </Link>
-            <button className="px-4 py-2 bg-white text-[#e60076] rounded font-semibold hover:bg-gray-200 transition">
-              </button>
+          
                 <ExportButtons/>
           </div>
         </div>

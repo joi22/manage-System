@@ -1,7 +1,7 @@
 const WorkoutCard = ({ workouts = [] }) => {
   return (
-    <div className="bg-white shadow p-4 rounded-lg">
-      <h3 className="text-xl font-semibold mb-2">Recent Workouts</h3>
+ <div className="bg-black shadow-md border rounded-xl p-6">
+  <h3 className="text-lg font-semibold mb-4">Recent Workouts</h3>
       {workouts.length === 0 ? (
         <p>No recent workouts</p>
       ) : (

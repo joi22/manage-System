@@ -35,12 +35,10 @@ const Dashboard = () => {
           progressLogsRes,
           notificationsRes,
         ] = await Promise.all([
-          axios.get(`/api/workout/${user._id}/recent`),
-          axios.get(`/api/nutrition/latest/${user._id}`),
-          axios.get(`/api/nutrition/${user._id}`),
-          axios.get(`/api/progress/${user._id}/latest`),
-          axios.get(`/api/progress/${user._id}`),
-          axios.get(`/api/notifications/${user._id}`),
+          axios.get(`http://localhost:3000/api/workout/${user._id}/recent`),
+          axios.get(`http://localhost:3000/api/nutrition/latest/${user._id}`),
+          axios.get(`http://localhost:3000/api/nutrition/${user._id}`),
+          axios.get(`http://localhost:3000/api/progress/${user._id}/latest`),
         ]);
 
         setWorkouts(workoutRes.data.data);
@@ -76,31 +74,48 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="p-4 space-y-6">
-      <h2 className="text-2xl font-bold">Welcome back, {user.name}</h2>
+   <div className="p-6 space-y-8 text-black bg-gray-50 min-h-screen">
+  <h2 className="text-3xl font-bold text-gray-800">Welcome back, {user.name}</h2>
 
-      {/* Notifications */}
-      <NotificationFeed notifications={notifications} />
+  {/* Top Cards: Notifications + Search */}
+  <div className="grid md:grid-cols-2 gap-6">
+    <NotificationFeed notifications={notifications} />
+    <SearchAndFilter
+      onSearchAndFilter={handleSearchAndFilter}
+      availableCategories={["All", "Strength", "Cardio", "Mobility", "Other"]}
+    />
+  </div>
 
-      {/* Search + Filter */}
-      <SearchAndFilter
-        onSearchAndFilter={handleSearchAndFilter}
-        availableCategories={["All", "Strength", "Cardio", "Mobility", "Other"]}
-      />
-
-      {/* Workouts */}
+  {/* Workout Section */}
+  <section>
+    <h3 className="text-xl font-semibold text-gray-700 mb-4">Workouts</h3>
+    <div className="grid md:grid-cols-2 gap-6">
       <WorkoutCard workouts={filteredWorkouts || []} />
       <WorkoutCategoryChart workouts={workouts} />
+    </div>
+  </section>
 
-      {/* Nutrition */}
+  {/* Nutrition Section */}
+  <section>
+    <h3 className="text-xl font-semibold text-gray-700 mb-4">Nutrition</h3>
+    <div className="grid md:grid-cols-2 gap-6">
       <NutritionSummary data={nutritionLatest} />
       <NutritionMacrosChart data={nutritionLogs} />
+    </div>
+  </section>
 
-      {/* Progress */}
+  {/* Progress Section */}
+  <section>
+    <h3 className="text-xl font-semibold text-gray-700 mb-4">Progress</h3>
+    <div className="grid md:grid-cols-2 gap-6">
       <ProgressSummary data={progressLatest} />
-      <ProgressChart data={progressLogs} />
       <WeightProgressChart data={progressLogs} />
     </div>
+    <div className="mt-6">
+      <ProgressChart data={progressLogs} />
+    </div>
+  </section>
+</div>
   );
 };
 

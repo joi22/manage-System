@@ -1,17 +1,24 @@
 const Workout = require("../Model/workout");
 
 const workoutController = {
-  // Create new workout
+  // ✅ Create new workout
   createWorkout: async (req, res) => {
     try {
+      const { userId, title, category, exercises, tags } = req.body;
+
+      if (!userId) {
+        return res.status(400).json({ message: "Missing userId" });
+      }
+
       const workout = new Workout({
-        ...req.body,
-        userId: req.user.id, // From JWT middleware
+        userId,
+        title,
+        category,
+        exercises,
+        tags,
       });
 
-      console.log("Creating workout for user:", req.user.id);
-      console.log("Workout data:", workout);
-
+      console.log("Creating workout for user:", userId);
       await workout.save();
 
       res.status(201).json({
@@ -25,24 +32,35 @@ const workoutController = {
     }
   },
 
-  // Get all workouts for the logged-in user
+  // ✅ Get all workouts for a user
   getUserWorkouts: async (req, res) => {
-  try {
-    const workouts = await Workout.find({ userId: req.params.id }); // ✅ changed here
-    res.status(200).json({ status: true, workouts });
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching workouts", error });
-  }
-},
+    try {
+      const workouts = await Workout.find({ userId: req.params.id });
+      res.status(200).json({ status: true, workouts });
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching workouts", error });
+    }
+  },
 
-  // Update a workout by ID
+  // ✅ Update a workout by ID
   updateWorkout: async (req, res) => {
     try {
+      const { userId } = req.body;
+
+      if (!userId) {
+        return res.status(400).json({ message: "Missing userId" });
+      }
+
       const updated = await Workout.findOneAndUpdate(
-        { _id: req.params.id, userId: req.user.id },
+        { _id: req.params.id, userId },
         req.body,
         { new: true }
       );
+
+      if (!updated) {
+        return res.status(404).json({ message: "Workout not found" });
+      }
+
       res.status(200).json({
         message: "Workout updated successfully",
         status: true,
@@ -53,18 +71,31 @@ const workoutController = {
     }
   },
 
-  // Delete a workout
+  // ✅ Delete a workout
   deleteWorkout: async (req, res) => {
     try {
-      await Workout.findOneAndDelete({
+      const { userId } = req.body;
+
+      if (!userId) {
+        return res.status(400).json({ message: "Missing userId" });
+      }
+
+      const deleted = await Workout.findOneAndDelete({
         _id: req.params.id,
-        userId: req.user.id,
+        userId,
       });
+
+      if (!deleted) {
+        return res.status(404).json({ message: "Workout not found" });
+      }
+
       res.status(200).json({ message: "Workout deleted", status: true });
     } catch (error) {
       res.status(500).json({ message: "Error deleting workout", error });
     }
   },
+
+  // ✅ Get recent 3 workouts for user
   getlong: async (req, res) => {
     try {
       const workouts = await Workout.find({ userId: req.params.userId })
@@ -72,9 +103,11 @@ const workoutController = {
         .limit(3);
       res.json({ success: true, data: workouts });
     } catch (error) {
-      res
-        .status(500)
-        .json({ success: false, message: "Failed to fetch workouts", error });
+      res.status(500).json({
+        success: false,
+        message: "Failed to fetch workouts",
+        error,
+      });
     }
   },
 };
