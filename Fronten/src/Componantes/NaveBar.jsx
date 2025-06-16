@@ -33,7 +33,7 @@ const Navbar = () => {
           <a href="/" className="hover:text-pink-500 transition">Home</a>
           <a href="/exercises" className="hover:text-pink-500 transition">Exercises</a>
           <a href="/blog" className="hover:text-pink-500 transition">Blog</a>
-          <a href="/about" className="hover:text-pink-500 transition">About</a>
+          <a href="/aboutus" className="hover:text-pink-500 transition">About</a>
           <a href="/contact" className="hover:text-pink-500 transition">Contact Us</a>
         </nav>
         {/* Left side - Login/Profile */}
@@ -74,7 +74,7 @@ const Navbar = () => {
           <a href="/" className="block hover:text-pink-500">Home</a>
           <a href="/exercises" className="block hover:text-pink-500">Exercises</a>
           <a href="/blog" className="block hover:text-pink-500">Blog</a>
-          <a href="/about" className="block hover:text-pink-500">About</a>
+          <a href="/aboutus" className="block hover:text-pink-500">About</a>
           <a href="/contact" className="block hover:text-pink-500">Contact Us</a>
           {!user && (
             <a

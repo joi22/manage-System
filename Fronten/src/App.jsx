@@ -16,6 +16,10 @@ import Dashboard_Layout from "./Dashbord/Dashboard_Layout.jsx";
 import NotificationsPage from "./Componantes/NotificationsPage.jsx";
 import ExerciseList from "./Site/comp/ExerciseList.jsx";
 import ProfileEditPage from "./Site/ProfileEditPage.jsx";
+import AboutUs from "./Site/pages/AboutUs.jsx";
+import WorkoutForm from "./Site/WorkoutForm.jsx";
+import SupportForm from "./Site/pages/SupportForm.jsx";
+import ContactUs from "./Site/pages/ContactUs.jsx";
 // import Profile from "./Pages/Profile.jsx";
 
 
@@ -62,6 +66,27 @@ function App() {
           path: '/exercises',
           element: (
             <OnboardingStepper />
+
+          ),
+        },
+        {
+          path: '/workouts',
+          element: (
+            <WorkoutForm />
+
+          ),
+        },
+        {
+          path: '/aboutus',
+          element: (
+            <AboutUs />
+
+          ),
+        },
+        {
+          path: '/Support',
+          element: (
+            <ContactUs />
 
           ),
         },

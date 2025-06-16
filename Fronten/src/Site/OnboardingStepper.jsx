@@ -5,11 +5,12 @@ import StrengthExperienceForm from "./comp/StrengthExperienceForm";
 import TrainingRoutineForm from "./comp/TrainingRoutineForm";
 import InitialProgressForm from "./comp/InitialProgressForm";
 import InitialNutritionForm from "./comp/InitialNutritionForm";
+import { useNavigate } from "react-router-dom";
 
 export default function OnboardingStepper() {
     const { user } = useContext(UserContext);
     const userId = user?._id;
-
+const Navgate = useNavigate()
     const [step, setStep] = useState(1);
 
     if (!userId) {
@@ -22,7 +23,7 @@ export default function OnboardingStepper() {
             {step === 2 && <StrengthExperienceForm userId={userId} onNext={() => setStep(3)} onBack={() => setStep(1)} />}
             {step === 3 && <TrainingRoutineForm userId={userId} onNext={() => setStep(4)} onBack={() => setStep(2)} />}
             {step === 4 && <InitialProgressForm userId={userId} onNext={() => setStep(5)} onSkip={() => setStep(5)} />}
-            {step === 5 && <InitialNutritionForm userId={userId} onFinish={() => alert("Onboarding complete!")} onBack={() => setStep(4)} />}
+            {step === 5 && <InitialNutritionForm userId={userId} onFinish={() => Navgate("/workouts")} onBack={() => setStep(4)} />}
         </>
     );
 }

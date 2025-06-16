@@ -5,6 +5,7 @@ import FitnessGoalForm from "./comp/FitnessGoalForm";
 import { UserContext } from "../context/UserContextProvider";
 import ProgressSummary from "../Dashbord/comp/ProgressSummary";
 import WorkoutCard from "../Dashbord/comp/WorkoutCard";
+import ExportButtons from "../Componantes/ExportButtons";
 
 const Profile = () => {
   const { user, logout } = useContext(UserContext);
@@ -84,7 +85,7 @@ console.log(user)
           </div>
 
           <div className="space-x-2">
-            <Link to="/logout">
+            <Link to="/login">
               <button
                 onClick={() => {
                   logout();
@@ -100,6 +101,7 @@ console.log(user)
                 Go to Dashboard
               </button>
             </Link>
+            <ExportButtons/>
           </div>
         </div>
 

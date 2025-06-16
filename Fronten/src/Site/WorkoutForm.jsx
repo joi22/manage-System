@@ -4,8 +4,8 @@ import { UserContext } from "../context/UserContextProvider";
 import { toast } from "sonner";
 
 const WorkoutForm = ({ onWorkoutAdded }) => {
-  const { user , token } = useContext(UserContext);
-console.log(token)
+  const { user, token } = useContext(UserContext);
+
   const [form, setForm] = useState({
     title: "",
     category: "Strength",
@@ -13,119 +13,165 @@ console.log(token)
   });
 
   const handleChange = (e, i, field) => {
-    const newExercises = [...form.exercises];
-    newExercises[i][field] = e.target.value;
-    setForm({ ...form, exercises: newExercises });
+    const updated = [...form.exercises];
+    updated[i][field] = e.target.value;
+    setForm({ ...form, exercises: updated });
   };
 
   const addExercise = () => {
     setForm({
       ...form,
-      exercises: [...form.exercises, { name: "", sets: 0, reps: 0, weight: 0, notes: "" }]
+      exercises: [...form.exercises, { name: "", sets: 0, reps: 0, weight: 0, notes: "" }],
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:3000/api/workout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(form),
+      });
 
-    const workoutData = { ...form };
-    const token = localStorage.getItem("token"); // ✅
+      const result = await response.json();
 
-    const response = await fetch("http://localhost:3000/api/workout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // ✅ include token
-      },
-      body: JSON.stringify(workoutData),
-    });
-    const result = await response.json();
-    if (!response.ok) {
-      throw new Error(result.message || "Failed to add workout");
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to add workout");
+      }
+
+      toast.success("Workout added!");
+      onWorkoutAdded?.();
+      setForm({
+        title: "",
+        category: "Strength",
+        exercises: [{ name: "", sets: 0, reps: 0, weight: 0, notes: "" }],
+      });
+    } catch (error) {
+      toast.error(error.message || "Error saving workout.");
     }
-    onWorkoutAdded();
-    setForm({
-      title: "",
-      category: "strength",
-      exercises: [{ name: "", sets: 0, reps: 0, weight: 0, notes: "" }]
-    });
-
   };
 
-
   const EXERCISE_OPTIONS = [
-    "Bench Press",
-    "Squat",
-    "Deadlift",
-    "Push-ups",
-    "Pull-ups",
-    "Running",
-    "Cycling",
-    "Plank",
-    "Shoulder Press",
-    "Bicep Curls",
+    "Bench Press", "Squat", "Deadlift", "Push-ups", "Pull-ups",
+    "Running", "Cycling", "Plank", "Shoulder Press", "Bicep Curls"
   ];
 
-
   return (
-    <form onSubmit={handleSubmit} className=" p-6 rounded shadow space-y-4">
-      <input
-        type="text"
-        placeholder="Workout Title"
-        className="input"
-        value={form.title}
-        onChange={(e) => setForm({ ...form, title: e.target.value })}
-        required
-      />
+    <form onSubmit={handleSubmit} className="p-6 bg-[#222230] rounded-lg shadow-md space-y-6">
+      <div>
+        <label className="block font-semibold mb-1">Workout Title</label>
+        <input
+          type="text"
+          placeholder="e.g., Upper Body Day"
+          className="input input-bordered w-full"
+          value={form.title}
+          onChange={(e) => setForm({ ...form, title: e.target.value })}
+          required
+        />
+      </div>
+
+      <div>
+        <label className="block  font-semibold mb-1">Category</label>
+        <select
+          className=" bg-[#222230] w-50 border-2 border-solid input  "
+          value={form.category || "Strength"}
+          onChange={(e) => setForm({ ...form, category: e.target.value })}
+        >
+          <option value="Strength">Strength</option>
+          <option value="Cardio">Cardio</option>
+          <option value="Flexibility">Flexibility</option>
+          <option value="HIIT">HIIT</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
       {form.exercises.map((ex, i) => (
-        <div key={i} className="grid grid-cols-2 md:grid-cols-5 gap-2">
-          <select
-            className="input"
-            value={ex.name}
-            onChange={(e) => handleChange(e, i, "name")}
-            required
-          >
-            <option value="">Select Exercise</option>
-            {EXERCISE_OPTIONS.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-          <input
-            type="number"
-            placeholder="Sets"
-            className="input"
-            value={ex.sets}
-            onChange={(e) => handleChange(e, i, "sets")}
-          />
-          <input
-            type="number"
-            placeholder="Reps"
-            className="input"
-            value={ex.reps}
-            onChange={(e) => handleChange(e, i, "reps")}
-          />
-          <input
-            type="number"
-            placeholder="Weight"
-            className="input"
-            value={ex.weight}
-            onChange={(e) => handleChange(e, i, "weight")}
-          />
-          <input
-            placeholder="Notes"
-            className="input"
-            value={ex.notes}
-            onChange={(e) => handleChange(e, i, "notes")}
-          />
+        <div key={i} className="bg-[#222230] p-4 rounded-md shadow-inner space-y-3">
+          <h4 className="font-semibold text-gray-700">Exercise {i + 1}</h4>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium">Exercise Name</label>
+              <select
+                className="bg-[#222230] w-50 border-2 border-solid input"
+                value={ex.name}
+                onChange={(e) => handleChange(e, i, "name")}
+                required
+              >
+                <option value="">-- Select --</option>
+                {EXERCISE_OPTIONS.map((opt) => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium">Sets</label>
+              <input
+                type="number"
+                min={0}
+                placeholder="e.g., 3"
+                className="input input-bordered w-full"
+                value={ex.sets}
+                onChange={(e) => handleChange(e, i, "sets")}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium">Reps</label>
+              <input
+                type="number"
+                min={0}
+                placeholder="e.g., 10"
+                className="input input-bordered w-full"
+                value={ex.reps}
+                onChange={(e) => handleChange(e, i, "reps")}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium">Weight (kg)</label>
+              <input
+                type="number"
+                min={0}
+                placeholder="e.g., 50"
+                className="input input-bordered w-full"
+                value={ex.weight}
+                onChange={(e) => handleChange(e, i, "weight")}
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium">Notes</label>
+              <input
+                type="text"
+                placeholder="Optional notes (e.g., form tip)"
+                className="input input-bordered w-full"
+                value={ex.notes}
+                onChange={(e) => handleChange(e, i, "notes")}
+              />
+            </div>
+          </div>
         </div>
       ))}
-      <div className="flex gap-2">
-        <button type="button" onClick={addExercise} className="bg-blue-500 text-white px-3 py-1 rounded">
+
+      <div className="flex flex-wrap gap-4">
+        <button
+          type="button"
+          onClick={addExercise}
+          className="btn btn-outline btn-info"
+        >
           + Add Exercise
         </button>
-        <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
+
+        <button
+          type="submit"
+          className="btn btn-primary"
+        >
           Save Workout
         </button>
       </div>
