@@ -1,6 +1,7 @@
 const { Parser } = require("json2csv");
 const Workout = require("../Model/workout");
 const PDFDocument = require("pdfkit");
+
 const Nutrition = require("../Model/Nutrition");
 
 exports.getCSVReport = async (req, res) => {
@@ -61,10 +62,17 @@ exports.getCSVReport = async (req, res) => {
     res.status(500).json({ error: "Failed to generate CSV" });
   }
 };
+
 exports.getPDFReport = async (req, res) => {
   try {
     const userId = req.query.userId;
     console.log(userId);
+// =======
+
+// exports.getPDFReport = async (req, res) => {
+//   try {
+//     const userId = req.query.userId;
+// >>>>>>> d49b18853bd7dd006dc01b5e8dc93f6fa3f66241
     if (!userId) return res.status(400).json({ error: "Missing userId" });
 
     const workouts = await Workout.find({ userId });
@@ -72,10 +80,14 @@ exports.getPDFReport = async (req, res) => {
 
     const doc = new PDFDocument();
     res.setHeader("Content-Type", "application/pdf");
+
     res.setHeader(
       "Content-Disposition",
       "attachment; filename=fitness-report.pdf"
     );
+// =======
+//     res.setHeader("Content-Disposition", "attachment; filename=fitness-report.pdf");
+// >>>>>>> d49b18853bd7dd006dc01b5e8dc93f6fa3f66241
 
     doc.pipe(res);
     doc.fontSize(18).text("Fitness Report", { underline: true });
@@ -83,6 +95,7 @@ exports.getPDFReport = async (req, res) => {
 
     // Workouts
     doc.fontSize(14).text("Workouts", { underline: true });
+
     workouts.forEach((w) => {
       if (!w.exercises || w.exercises.length === 0) {
         doc
@@ -126,6 +139,7 @@ exports.getPDFReport = async (req, res) => {
               .text(`  Quantity: ${item.quantity || "N/A"}`)
               .text(`  Calories: ${item.calories || 0}`)
               .text(
+
                 `  Macros — Protein: ${item.macros.protein || 0}g, Carbs: ${
                   item.macros.carbs || 0
                 }g, Fat: ${item.macros.fat || 0}g`

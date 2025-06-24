@@ -9,7 +9,9 @@ const AppLayout = () => {
     <>
       <NaveBar />
       <Outlet />
-      <Footer/>
+
+      <Footer />
+
     </>
   )
 }

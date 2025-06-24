@@ -36,7 +36,6 @@ const Profile = () => {
         setLoading(false);
       }
     };
-console.log(user)
     if (user?._id) {
       fetchOnboarding();
     }
@@ -101,7 +100,6 @@ console.log(user)
                 Go to Dashboard
               </button>
             </Link>
-            <ExportButtons/>
           </div>
         </div>
 

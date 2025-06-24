@@ -12,9 +12,10 @@ const ProgressSummary = ({ data }) => {
         <strong>Weight:</strong> {data.weight} kg
       </div>
 
-      <div className="mb-2">
+      {/* <div className="mb-2">
         <strong>Measurements:</strong>
         <ul className="list-disc pl-5 text-sm">
+          {console.log(data,"this")}
           {data.measurements && Object.entries(data.measurements).map(([key, value]) => (
             <li key={key}>{key}: {value} cm</li>
           ))}
@@ -28,7 +29,7 @@ const ProgressSummary = ({ data }) => {
           <li>Lift Weight: {data.performance?.liftWeight || 'N/A'} kg</li>
           <li>Other: {data.performance?.other || 'N/A'}</li>
         </ul>
-      </div>
+      </div> */}
 
       <p className="text-sm text-gray-700 mt-2"><strong>Notes:</strong> {data.notes || 'None'}</p>
     </div>

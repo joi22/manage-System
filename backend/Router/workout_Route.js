@@ -3,10 +3,10 @@ const router = express.Router();
 const auth = require("../auth/auth");
 const workoutController = require("../Controller/workout_controller");
 
-router.post("/", auth, workoutController.createWorkout);
+router.post("/", workoutController.createWorkout);
 router.get("/:id",  workoutController.getUserWorkouts);
-router.put("/:id", auth, workoutController.updateWorkout);
-router.delete("/:id", auth, workoutController.deleteWorkout);
-router.get('/:userId/recent', auth, workoutController.getlong);
+router.put("/:id", workoutController.updateWorkout);
+router.delete("/:id", workoutController.deleteWorkout);
+router.get('/:userId/recent', workoutController.getlong);
 
 module.exports = router;

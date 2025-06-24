@@ -17,6 +17,7 @@ const Support = require('./Router/supportRoutes.js')
 
 
 
+
 const app = express();
 const PORT = process.env.PORTS || 5000;
 
@@ -36,6 +37,7 @@ app.use("/api/", dashboard_Route);
 app.use('/api/notifications',notificationRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/support', Support);
+
 app.get('/', (req, res) => {
   res.send('Hello, world!');
 });
