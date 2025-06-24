@@ -42,6 +42,14 @@ app.get('/', (req, res) => {
   res.send('Hello, world!');
 });
 
+
+
+app.use(express.static(path.join(__dirname, '../Fronten/dist')));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../Fronten/dist/index.html"));
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
